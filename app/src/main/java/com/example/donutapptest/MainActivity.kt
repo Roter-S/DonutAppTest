@@ -15,6 +15,7 @@ import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import com.example.donutapptest.ui.theme.auth.LoginScreen
+import com.example.donutapptest.ui.theme.auth.RegisterScreen
 import com.example.donutapptest.ui.theme.views.HomeScreen
 
 class MainActivity : ComponentActivity() {
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") { LoginScreen(navController) }
+                        composable("register") { RegisterScreen(navController) }
                         composable("home/{username}") { backStackEntry ->
                             HomeScreen(backStackEntry.arguments?.getString("username"))
                         }

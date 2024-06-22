@@ -8,4 +8,7 @@
     <string name="login_error_enter_username_and_password">Por favor ingrese un nombre de usuario y contraseña</string>
     <string name="login_error_username_length">El nombre de usuario debe tener al menos 8 caracteres.</string>
     <string name="login_error_password_length">La contraseña debe tener al menos 6 caracteres y contener una letra mayúscula</string>
+    <string name="register_title">Registrarse</string>
+    <string name="register_confirm_password">Confirmar contraseña</string>
+    <string name="register_error_password_not_match">Las contraseñas no coinciden</string>
 </resources>

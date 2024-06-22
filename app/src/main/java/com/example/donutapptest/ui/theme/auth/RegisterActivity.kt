@@ -1,14 +1,11 @@
 package com.example.donutapptest.ui.theme.auth
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,16 +28,19 @@ import com.example.donutapptest.ui.theme.components.CustomTextField
 import com.example.donutapptest.ui.theme.components.CustomTextFieldPassword
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController) {
     val image: ImageBitmap = ImageBitmap.imageResource(R.drawable.logo_byte)
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
+    var confirmPasswordHidden by rememberSaveable { mutableStateOf(true) }
     var alertMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
     val enterUserAndPass = stringResource(id = R.string.login_error_enter_username_and_password)
     val usernameLength = stringResource(id = R.string.login_error_username_length)
     val passwordLength = stringResource(id = R.string.login_error_password_length)
+    val passwordNotMatch = stringResource(id = R.string.register_error_password_not_match)
 
     if (showDialog) {
         AlertDialog(
@@ -53,7 +53,7 @@ fun LoginScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp, 50.dp, 30.dp, 0.dp)
+            .padding(30.dp, 30.dp, 30.dp, 0.dp)
     ) {
         CustomIconImage(
             image = image,
@@ -76,7 +76,14 @@ fun LoginScreen(navController: NavHostController) {
             passwordHidden = passwordHidden,
             onPasswordHiddenChange = { passwordHidden = it }
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        CustomTextFieldPassword(
+            label = stringResource(id = R.string.register_confirm_password),
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            password = confirmPassword,
+            passwordHidden = confirmPasswordHidden,
+            onPasswordHiddenChange = { confirmPasswordHidden = it }
+        )
         Button(
             onClick = {
                 when {
@@ -96,19 +103,15 @@ fun LoginScreen(navController: NavHostController) {
                         showDialog = true
                     }
 
+                    password != confirmPassword -> {
+                        alertMessage = passwordNotMatch
+                        showDialog = true
+                    }
+
                     else -> {
-                        navController.navigate("home/$username")
+                        navController.navigate("login")
                     }
                 }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(id = R.string.login_title))
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            onClick = {
-                navController.navigate("register")
             },
             modifier = Modifier.fillMaxWidth()
         ) {
