@@ -2,10 +2,13 @@ package com.example.donutapptest.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val SkyBlueDark = Color(android.graphics.Color.parseColor("#1E7EC5"))
+val BlueDarker = Color(android.graphics.Color.parseColor("#154C6C"))
+val DeepBlue = Color(android.graphics.Color.parseColor("#0B2D3F"))
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val SkyBlue = Color(android.graphics.Color.parseColor("#2699FB"))
+val BlueDark = Color(android.graphics.Color.parseColor("#2699FB"))
+val LightBlue = Color(android.graphics.Color.parseColor("#7EB6FF"))
+
+val ErrorRed = Color(android.graphics.Color.parseColor("#ff5353"))
+
