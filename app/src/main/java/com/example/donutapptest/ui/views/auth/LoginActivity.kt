@@ -47,6 +47,7 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
     val enterUserAndPass = stringResource(id = R.string.login_error_enter_username_and_password)
     val usernameLength = stringResource(id = R.string.login_error_username_length)
     val passwordLength = stringResource(id = R.string.login_error_password_length)
+    val invalidUserOrPass = stringResource(id = R.string.login_error_invalid_credentials)
 
     if (showDialog) {
         AlertDialog(
@@ -113,7 +114,7 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                                         launchSingleTop = true
                                     }
                                 } else {
-                                    alertMessage = "Usuario o contraseña incorrectos"
+                                    alertMessage =invalidUserOrPass
                                     showDialog = true
                                 }
                             }

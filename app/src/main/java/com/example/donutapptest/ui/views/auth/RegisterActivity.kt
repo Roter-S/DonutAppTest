@@ -44,6 +44,8 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
     val usernameLength = stringResource(id = R.string.login_error_username_length)
     val passwordLength = stringResource(id = R.string.login_error_password_length)
     val passwordNotMatch = stringResource(id = R.string.register_error_password_not_match)
+    val registerSuccess = stringResource(id = R.string.register_success)
+
 
     val alert by userViewModel.showAlert.collectAsState()
 
@@ -128,7 +130,7 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
                     }
 
                     else -> {
-                        userViewModel.registerUser(username, password)
+                        userViewModel.registerUser(username, password, registerSuccess)
                     }
                 }
             },
@@ -138,3 +140,4 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
         }
     }
 }
+

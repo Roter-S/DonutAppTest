@@ -25,7 +25,6 @@ fun HomeScreen(navController: NavHostController, sessionManager: SessionManager,
     ) {
         Text(text = "Welcome, $username!")
         Button(onClick = {
-            // Clear session and navigate back to login screen
             sessionManager.clearSession()
             navController.navigate("login") {
                 popUpTo(navController.graph.startDestinationId) { inclusive = true }

@@ -4,7 +4,7 @@
     <!-- COMMON -->
     <string name="common_empty">Please fill in all fields</string>
 
-    <!-- LOGIN/REGISTER SCREEN -->
+    <!-- INPUTS LOGIN/REGISTER SCREEN -->
     <string name="login_title">Login</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
@@ -20,7 +20,13 @@
     <string name="login_error_password_length">
         Password must be at least 6 characters and contain an uppercase letter
     </string>
+    <string name="login_error_invalid_credentials">
+        Invalid username or password
+    </string>
     <string name="register_error_password_not_match">
         Passwords do not match
     </string>
+
+    <!-- Success LOGIN/REGISTER -->
+    <string name="register_success">User registered successfully</string>
 </resources>

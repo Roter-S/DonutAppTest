@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val userDao: UserDao = UserDatabase.getDatabase(application).userDao()
-
     private val _showAlert = MutableStateFlow<String?>(null)
+
     val showAlert: StateFlow<String?> get() = _showAlert
 
-    fun registerUser(username: String, password: String) {
+    fun registerUser(username: String, password: String, registerSuccess: String) {
         viewModelScope.launch {
             userDao.insert(User(username = username, password = password))
-            _showAlert.value = "Usuario registrado exitosamente"
+            _showAlert.value = registerSuccess
         }
     }
 
@@ -27,3 +27,4 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         _showAlert.value = null
     }
 }
+
