@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     val navController = rememberNavController()
-
                     val startDestination = if (username != null) {
                         "home/${sessionManager.getUsername()}"
                     } else {
