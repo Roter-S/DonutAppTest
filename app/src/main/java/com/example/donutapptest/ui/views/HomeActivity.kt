@@ -1,37 +1,28 @@
 package com.example.donutapptest.ui.views
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.donutapptest.R
+import com.example.donutapptest.data.Donut
 import com.example.donutapptest.data.SessionManager
+import com.example.donutapptest.viewmodel.DonutViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +31,13 @@ fun HomeScreen(navController: NavHostController) {
     val sessionManager = SessionManager(context)
     val username = sessionManager.getUsername()
     val appName = stringResource(id = R.string.app_name)
+    val donutViewModel: DonutViewModel = viewModel()
+    val donuts = donutViewModel.donuts
+
+    LaunchedEffect(Unit) {
+        donutViewModel.fetchDonuts()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -49,7 +47,7 @@ fun HomeScreen(navController: NavHostController) {
                 actions = {
                     val expanded = remember { mutableStateOf(false) }
                     val logout = stringResource(id = R.string.logout)
-                    Box() {
+                    Box {
                         IconButton(onClick = { expanded.value = true }) {
                             Icon(
                                 Icons.Default.MoreVert,
@@ -101,17 +99,43 @@ fun HomeScreen(navController: NavHostController) {
                 contentPadding = innerPadding,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                val list = (0..75).map { it.toString() }
-                items(count = list.size) {
-                    Text(
-                        text = list[it],
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    )
+                donuts.value?.let { list ->
+                    items(list) { donut ->
+                        DonutItem(donut = donut)
+                    }
+                } ?: run {
+                    item {
+                        Text(
+                            text = "Loading...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        )
+                    }
                 }
             }
         }
     )
+}
+
+@Composable
+fun DonutItem(donut: Donut) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = donut.name, style = MaterialTheme.typography.titleLarge)
+        Text(text = "Type: ${donut.type}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "PPU: ${donut.ppu}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Batters:", style = MaterialTheme.typography.bodyLarge)
+        donut.batters.batter.forEach { batter ->
+            Text(text = "- ${batter.type}", style = MaterialTheme.typography.bodyLarge)
+        }
+        Text(text = "Toppings:", style = MaterialTheme.typography.bodyLarge)
+        donut.topping.forEach { topping ->
+            Text(text = "- ${topping.type}", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
 }
