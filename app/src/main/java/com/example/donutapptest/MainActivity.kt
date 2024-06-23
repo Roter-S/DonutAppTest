@@ -15,6 +15,7 @@ import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.donutapptest.data.SessionManager
 import com.example.donutapptest.data.UserDatabase
 import com.example.donutapptest.data.UserRepository
 import com.example.donutapptest.ui.views.auth.LoginScreen
@@ -28,6 +29,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val database = UserDatabase.getDatabase(applicationContext)
         val userRepository = UserRepository(database.userDao())
+        val sessionManager = SessionManager(this)
+        val username = sessionManager.getUsername()
         setContent {
             DonutAppTestTheme {
                 Column(
@@ -37,9 +40,15 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "login") {
+
+                    val startDestination = if (username != null) {
+                        "home/${sessionManager.getUsername()}"
+                    } else {
+                        "login"
+                    }
+                    NavHost(navController = navController, startDestination = startDestination) {
                         composable("login") {
-                            LoginScreen(navController, userRepository)
+                            LoginScreen(navController, userRepository, sessionManager)
                         }
                         composable("register") {
                             val userViewModel = viewModel<UserViewModel>()
@@ -47,7 +56,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("home/{username}") { backStackEntry ->
-                            HomeScreen(backStackEntry.arguments?.getString("username"))
+                            HomeScreen(
+                                navController = navController,
+                                sessionManager = sessionManager,
+                                username = backStackEntry.arguments?.getString("username")
+                            )
                         }
                     }
                 }

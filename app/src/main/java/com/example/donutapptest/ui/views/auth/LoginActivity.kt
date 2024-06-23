@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.donutapptest.R
+import com.example.donutapptest.data.SessionManager
 import com.example.donutapptest.data.UserRepository
 import com.example.donutapptest.ui.components.AlertDialog
 import com.example.donutapptest.ui.components.CustomIconImage
@@ -36,10 +37,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LoginScreen(navController: NavHostController, userRepository: UserRepository) {
+fun LoginScreen(navController: NavHostController, userRepository: UserRepository, sessionManager: SessionManager) {
     val image: ImageBitmap = ImageBitmap.imageResource(R.drawable.logo_byte)
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf("admin098") }
+    var password by rememberSaveable { mutableStateOf("Admin@2024") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     var alertMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
@@ -106,7 +107,11 @@ fun LoginScreen(navController: NavHostController, userRepository: UserRepository
                             val isAuthenticated = userRepository.authenticate(username, password)
                             withContext(Dispatchers.Main) {
                                 if (isAuthenticated) {
-                                    navController.navigate("home/$username")
+                                    sessionManager.saveUsername(username)
+                                    navController.navigate("home/$username") {
+                                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
                                 } else {
                                     alertMessage = "Usuario o contraseña incorrectos"
                                     showDialog = true

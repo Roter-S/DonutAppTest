@@ -31,9 +31,9 @@ import com.example.donutapptest.viewmodel.UserViewModel
 @Composable
 fun RegisterScreen(navController: NavHostController, userViewModel: UserViewModel) {
     val image: ImageBitmap = ImageBitmap.imageResource(R.drawable.logo_byte)
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("admin098") }
+    var password by remember { mutableStateOf("Admin@2024") }
+    var confirmPassword by remember { mutableStateOf("Admin@2024") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     var confirmPasswordHidden by rememberSaveable { mutableStateOf(true) }
     var alertMessage by remember { mutableStateOf("") }
