@@ -1,5 +1,5 @@
 
-# Mi Aplicación en Kotlin Compose
+# Aplicación en Kotlin Compose
 
 ## Requisitos
 
@@ -21,7 +21,7 @@ Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
 1. Clona el repositorio:
 
    ```sh
-   git clone https://github.com/tu-usuario/tu-repo.git
+   git clone https://github.com/Roter-S/DonutAppTest.git
 
 2. Abre el proyecto en Android Studio:
 
