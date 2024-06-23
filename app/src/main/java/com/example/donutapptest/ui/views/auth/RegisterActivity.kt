@@ -9,6 +9,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +45,28 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
     val passwordLength = stringResource(id = R.string.login_error_password_length)
     val passwordNotMatch = stringResource(id = R.string.register_error_password_not_match)
 
+    val alert by userViewModel.showAlert.collectAsState()
+
+    LaunchedEffect(alert) {
+        alert?.let {
+            alertMessage = it
+            showDialog = true
+            userViewModel.clearAlert()
+        }
+    }
+
     if (showDialog) {
         AlertDialog(
             title = "",
             message = alertMessage,
-            onDismissRequest = { showDialog = false }
+            onDismissRequest = {
+                showDialog = false
+                navController.navigate("login") {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                }
+            }
         )
     }
 
@@ -99,8 +118,7 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
                     }
 
                     password.length < 6 || !password.any { it.isUpperCase() } -> {
-                        alertMessage =
-                            passwordLength
+                        alertMessage = passwordLength
                         showDialog = true
                     }
 
@@ -111,7 +129,6 @@ fun RegisterScreen(navController: NavHostController, userViewModel: UserViewMode
 
                     else -> {
                         userViewModel.registerUser(username, password)
-                        navController.navigate("login")
                     }
                 }
             },
