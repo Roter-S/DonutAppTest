@@ -29,4 +29,7 @@
 
     <!-- Success LOGIN/REGISTER -->
     <string name="register_success">User registered successfully</string>
+
+    <!-- ACTIONS LOGIN/REGISTERS-->
+    <string name="logout">Logout</string>
 </resources>

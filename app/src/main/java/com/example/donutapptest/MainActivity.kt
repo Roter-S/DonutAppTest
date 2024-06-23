@@ -58,8 +58,6 @@ class MainActivity : ComponentActivity() {
                         composable("home/{username}") { backStackEntry ->
                             HomeScreen(
                                 navController = navController,
-                                sessionManager = sessionManager,
-                                username = backStackEntry.arguments?.getString("username")
                             )
                         }
                     }
