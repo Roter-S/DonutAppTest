@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.theme.auth
+package com.example.donutapptest.ui.views.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,13 +25,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.donutapptest.R
-import com.example.donutapptest.ui.theme.components.AlertDialog
-import com.example.donutapptest.ui.theme.components.CustomIconImage
-import com.example.donutapptest.ui.theme.components.CustomTextField
-import com.example.donutapptest.ui.theme.components.CustomTextFieldPassword
+import com.example.donutapptest.data.UserRepository
+import com.example.donutapptest.ui.components.AlertDialog
+import com.example.donutapptest.ui.components.CustomIconImage
+import com.example.donutapptest.ui.components.CustomTextField
+import com.example.donutapptest.ui.components.CustomTextFieldPassword
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, userRepository: UserRepository) {
     val image: ImageBitmap = ImageBitmap.imageResource(R.drawable.logo_byte)
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -97,7 +102,17 @@ fun LoginScreen(navController: NavHostController) {
                     }
 
                     else -> {
-                        navController.navigate("home/$username")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val isAuthenticated = userRepository.authenticate(username, password)
+                            withContext(Dispatchers.Main) {
+                                if (isAuthenticated) {
+                                    navController.navigate("home/$username")
+                                } else {
+                                    alertMessage = "Usuario o contraseña incorrectos"
+                                    showDialog = true
+                                }
+                            }
+                        }
                     }
                 }
             },

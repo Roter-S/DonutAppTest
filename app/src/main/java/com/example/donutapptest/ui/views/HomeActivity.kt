@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.theme.views
+package com.example.donutapptest.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

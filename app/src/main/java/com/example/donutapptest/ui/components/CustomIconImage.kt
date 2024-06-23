@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.theme.components
+package com.example.donutapptest.ui.components
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme

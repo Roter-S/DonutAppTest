@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.theme.components
+package com.example.donutapptest.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

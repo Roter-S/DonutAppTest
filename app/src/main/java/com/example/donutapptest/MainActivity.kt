@@ -14,14 +14,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import com.example.donutapptest.ui.theme.auth.LoginScreen
-import com.example.donutapptest.ui.theme.auth.RegisterScreen
-import com.example.donutapptest.ui.theme.views.HomeScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.donutapptest.data.UserDatabase
+import com.example.donutapptest.data.UserRepository
+import com.example.donutapptest.ui.views.auth.LoginScreen
+import com.example.donutapptest.ui.views.HomeScreen
+import com.example.donutapptest.ui.views.auth.RegisterScreen
+import com.example.donutapptest.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val database = UserDatabase.getDatabase(applicationContext)
+        val userRepository = UserRepository(database.userDao())
         setContent {
             DonutAppTestTheme {
                 Column(
@@ -32,8 +38,14 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
-                        composable("login") { LoginScreen(navController) }
-                        composable("register") { RegisterScreen(navController) }
+                        composable("login") {
+                            LoginScreen(navController, userRepository)
+                        }
+                        composable("register") {
+                            val userViewModel = viewModel<UserViewModel>()
+                            RegisterScreen(navController = navController, userViewModel = userViewModel)
+                        }
+
                         composable("home/{username}") { backStackEntry ->
                             HomeScreen(backStackEntry.arguments?.getString("username"))
                         }
