@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">DonutAppTest</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!--login screen-->
+    <string name="login_btn">Iniciar Sesión</string>
 </resources>
