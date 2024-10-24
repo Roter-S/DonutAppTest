@@ -43,6 +43,7 @@ android {
 
 dependencies {
     // dagger hilt
+    implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
@@ -54,6 +55,12 @@ dependencies {
 
     // retrofit
     implementation(libs.retrofit)
+
+    //compose navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //material icons extended
+    implementation(libs.androidx.material.icons.extended)
 
     // compose
     implementation(libs.androidx.core.ktx)
