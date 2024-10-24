@@ -1,9 +1,10 @@
 package com.example.donutapptest.ui.view.auth
 
-
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,7 @@ import com.example.donutapptest.R
 import com.example.donutapptest.ui.components.OutlinedRoundedField
 import com.example.donutapptest.ui.components.ScaffoldNotification
 import com.example.donutapptest.ui.viewmodel.LoginViewModel
+
 
 @Composable
 fun LoginScreen(
@@ -67,6 +70,7 @@ fun LoginScreen(
                     placeholder = stringResource(id = R.string.login_username_placeholder),
                     keyboardType = KeyboardType.Text
                 )
+
                 OutlinedRoundedField(
                     value = uiState.password,
                     onValueChange = { loginViewModel.onPasswordChange(it) },
@@ -74,6 +78,7 @@ fun LoginScreen(
                     placeholder = stringResource(id = R.string.login_password_placeholder),
                     keyboardType = KeyboardType.Password,
                 )
+
                 Button(
                     onClick = {
                         loginViewModel.validateLogin(context) {
@@ -88,12 +93,31 @@ fun LoginScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.login_button),
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(10.dp)
                     )
                 }
+
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.login_register_prompt),
+                    )
+                    Text(
+                        text = stringResource(id = R.string.register_here),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .clickable {
+                            navController.navigate("register")
+                        }
+                    )
+                }
+
             }
         }
-
         uiState.errorMessage?.let {
             ScaffoldNotification(
                 scope = scope,
@@ -109,10 +133,8 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     val navController = rememberNavController()
-
     val loginViewModel = remember {
         LoginViewModel()
     }
-
     LoginScreen(navController = navController, loginViewModel = loginViewModel)
 }

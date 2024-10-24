@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.donutapptest.ui.view.HomeScreen
 import com.example.donutapptest.ui.view.auth.LoginScreen
+import com.example.donutapptest.ui.view.auth.RegisterScreen
 import com.example.donutapptest.ui.viewmodel.LoginViewModel
 import com.example.donutapptest.util.enums.Screen
 
@@ -17,6 +18,9 @@ fun NavigationComponent(navController: NavHostController, modifier: Modifier = M
         composable(Screen.LOGIN.route) {
             val loginViewModel: LoginViewModel = viewModel()
             LoginScreen(navController = navController, loginViewModel = loginViewModel)
+        }
+        composable(Screen.REGISTER.route) {
+            RegisterScreen()
         }
         composable(Screen.HOME.route) {
             HomeScreen()

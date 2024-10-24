@@ -57,7 +57,6 @@ fun OutlinedRoundedField(
                     color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(24.dp)
                 )
-                .clip(RoundedCornerShape(16.dp))
                 .background(Color.Transparent)
                 .fillMaxWidth()
         ) {
