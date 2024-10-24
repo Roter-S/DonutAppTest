@@ -14,6 +14,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.donutapptest.ui.theme.AlertError
+import com.example.donutapptest.ui.theme.AlertInfo
+import com.example.donutapptest.ui.theme.AlertSuccess
+import com.example.donutapptest.ui.theme.AlertWarning
+import com.example.donutapptest.ui.theme.OnAlertError
+import com.example.donutapptest.ui.theme.OnAlertInfo
+import com.example.donutapptest.ui.theme.OnAlertSuccess
+import com.example.donutapptest.ui.theme.OnAlertWarning
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -22,7 +30,7 @@ fun ScaffoldNotification(
     scope: CoroutineScope,
     message: String,
     onDismiss: () -> Unit,
-    type: String = "success" // default type is success
+    type: String = "success"
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -47,8 +55,8 @@ fun ScaffoldNotification(
                 Snackbar(
                     snackbarData = data,
                     containerColor = getColorForType(type),
-                    actionColor = MaterialTheme.colorScheme.onBackground,
-                    contentColor = MaterialTheme.colorScheme.onBackground
+                    actionColor = getColorOnType(type),
+                    contentColor = getColorOnType(type)
                 )
             }
         )
@@ -57,8 +65,18 @@ fun ScaffoldNotification(
 
 @Composable
 fun getColorForType(type: String): Color = when (type) {
-    "error" -> Color.Red
-    "warning" -> Color.Yellow
-    "success" -> MaterialTheme.colorScheme.primary
+    "info" -> AlertInfo
+    "success" -> AlertSuccess
+    "warning" -> AlertWarning
+    "error" -> AlertError
     else -> MaterialTheme.colorScheme.surface
+}
+
+@Composable
+fun getColorOnType(type: String): Color = when (type) {
+    "info" -> OnAlertInfo
+    "success" -> OnAlertSuccess
+    "warning" -> OnAlertWarning
+    "error" -> OnAlertError
+    else -> MaterialTheme.colorScheme.onSurface
 }
