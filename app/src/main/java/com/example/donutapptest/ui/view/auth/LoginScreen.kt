@@ -54,7 +54,7 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_logo),
@@ -89,7 +89,7 @@ fun LoginScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp)
+                        .padding(top = 32.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.login_button),

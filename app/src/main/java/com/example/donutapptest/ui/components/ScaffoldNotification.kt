@@ -2,6 +2,7 @@ package com.example.donutapptest.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.donutapptest.ui.theme.AlertError
 import com.example.donutapptest.ui.theme.AlertInfo
 import com.example.donutapptest.ui.theme.AlertSuccess
@@ -27,19 +29,14 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ScaffoldNotification(
-    scope: CoroutineScope,
-    message: String,
-    onDismiss: () -> Unit,
-    type: String = "success"
+    scope: CoroutineScope, message: String, onDismiss: () -> Unit, type: String = "success"
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = message) {
         scope.launch {
-            val result = snackbarHostState.showSnackbar(
-                message = message,
-                actionLabel = "OK",
-                duration = SnackbarDuration.Short
+            val result = snackBarHostState.showSnackbar(
+                message = message, actionLabel = "OK", duration = SnackbarDuration.Short
             )
             if (result == SnackbarResult.Dismissed || result == SnackbarResult.ActionPerformed) {
                 onDismiss()
@@ -48,18 +45,17 @@ fun ScaffoldNotification(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        SnackbarHost(
-            hostState = snackbarHostState,
+        SnackbarHost(hostState = snackBarHostState,
             modifier = Modifier.align(Alignment.BottomCenter),
             snackbar = { data ->
                 Snackbar(
                     snackbarData = data,
                     containerColor = getColorForType(type),
                     actionColor = getColorOnType(type),
-                    contentColor = getColorOnType(type)
+                    contentColor = getColorOnType(type),
+                    shape = RoundedCornerShape(22.dp)
                 )
-            }
-        )
+            })
     }
 }
 

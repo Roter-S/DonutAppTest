@@ -2,13 +2,12 @@
     <string name="app_name">DonutAppTest</string>
 
     <!-- Screen Login and Register -->
-    <string name="login_title">Login</string>
     <string name="login_username_label">Username</string>
     <string name="login_username_placeholder">Enter your username</string>
     <string name="login_password_label">Password</string>
     <string name="login_password_placeholder">Enter your password</string>
     <string name="login_button">Login</string>
     <string name="login_error_message">Username or password is incorrect</string>
-    <string name="login_register_prompt">¿No tienes una cuenta?</string>
-    <string name="register_here">Regístrate aquí</string>
+    <string name="login_register_prompt">Don\'t have an account?</string>
+    <string name="register_here">Register here</string>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DonutAppTest</string>
+    <string name="login_username_label">Usuario</string>
+    <string name="login_username_placeholder">Introduce tu usuario</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_password_placeholder">Introduce tu contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_error_message">El nombre de usuario o la contraseña son incorrectos</string>
+    <string name="login_register_prompt">¿No tienes una cuenta?</string>
+    <string name="register_here">Regístrate aquí</string>
+</resources>
