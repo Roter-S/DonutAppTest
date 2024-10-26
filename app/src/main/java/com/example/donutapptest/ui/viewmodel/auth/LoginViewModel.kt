@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.viewmodel
+package com.example.donutapptest.ui.viewmodel.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

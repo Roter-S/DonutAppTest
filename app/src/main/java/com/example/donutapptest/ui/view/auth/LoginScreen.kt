@@ -30,7 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.R
 import com.example.donutapptest.ui.components.OutlinedRoundedField
 import com.example.donutapptest.ui.components.ScaffoldNotification
-import com.example.donutapptest.ui.viewmodel.LoginViewModel
+import com.example.donutapptest.ui.viewmodel.auth.LoginViewModel
 
 
 @Composable
@@ -54,7 +54,7 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 32.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_logo),
@@ -111,8 +111,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .padding(start = 4.dp)
                             .clickable {
-                            navController.navigate("register")
-                        }
+                                navController.navigate("register")
+                            }
                     )
                 }
 
