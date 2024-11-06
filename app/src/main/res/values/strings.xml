@@ -1,13 +1,24 @@
 <resources>
     <string name="app_name">DonutAppTest</string>
 
-    <!-- Screen Login and Register -->
+    <!-- Screen Login -->
     <string name="login_username_label">Username</string>
     <string name="login_username_placeholder">Enter your username</string>
     <string name="login_password_label">Password</string>
     <string name="login_password_placeholder">Enter your password</string>
     <string name="login_button">Login</string>
-    <string name="login_error_message">Username or password is incorrect</string>
     <string name="login_register_prompt">Don\'t have an account?</string>
     <string name="register_here">Register here</string>
+
+    <!-- commons -->
+    <string name="common_loading">Loading…</string>
+
+    <!-- errors -->
+    <string name="error_message_auth_invalid_credentials">Invalid username or password</string>
+    <string name="error_message_auth_username_length_error">
+        Username must be at least 8 characters
+    </string>
+    <string name="error_message_auth_password_complexity_error">
+        Password must be at least 6 characters and contain an uppercase letter
+    </string>
 </resources>

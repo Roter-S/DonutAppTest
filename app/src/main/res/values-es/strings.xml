@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Screen Login -->
     <string name="app_name">DonutAppTest</string>
     <string name="login_username_label">Usuario</string>
     <string name="login_username_placeholder">Introduce tu usuario</string>
     <string name="login_password_label">Contraseña</string>
     <string name="login_password_placeholder">Introduce tu contraseña</string>
     <string name="login_button">Ingresar</string>
-    <string name="login_error_message">El nombre de usuario o la contraseña son incorrectos</string>
     <string name="login_register_prompt">¿No tienes una cuenta?</string>
     <string name="register_here">Regístrate aquí</string>
+
+    <!-- commons -->
+    <string name="common_loading">Cargando…</string>
+
+    <!-- errors -->
+    <string name="error_message_auth_invalid_credentials">
+        Nombre de usuario o contraseña no válidos
+    </string>
+    <string name="error_message_auth_username_length_error">
+        El nombre de usuario debe tener al menos 8 caracteres
+    </string>
+    <string name="error_message_auth_password_complexity_error">
+        La contraseña debe tener al menos 6 caracteres y contener una letra mayúscula
+    </string>
 </resources>

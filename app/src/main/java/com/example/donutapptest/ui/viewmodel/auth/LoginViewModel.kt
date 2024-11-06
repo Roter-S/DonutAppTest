@@ -11,21 +11,44 @@ import kotlinx.coroutines.launch
 
 data class LoginUiState(
     val username: String = "",
-    val password: String = "password",
+    val usernameError: String? = null,
+    val usernameTouched: Boolean = false,
+    val password: String = "",
+    val passwordError: String? = null,
+    val passwordTouched: Boolean = false,
+    val errorMessage: String? = null,
+    val isFormValid: Boolean = false,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
 )
 
 open class LoginViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState
 
-    fun onUsernameChange(newUsername: String) {
-        _uiState.value = _uiState.value.copy(username = newUsername)
+    fun onUsernameChange(newUsername: String, context: Context) {
+        _uiState.value = _uiState.value.copy(username = newUsername, usernameTouched = true)
+        validateForm(context)
     }
 
-    fun onPasswordChange(newPassword: String) {
-        _uiState.value = _uiState.value.copy(password = newPassword)
+    fun onPasswordChange(newPassword: String, context: Context) {
+        _uiState.value = _uiState.value.copy(password = newPassword, passwordTouched = true)
+        validateForm(context)
+    }
+
+    private fun validateForm(context: Context) {
+        val usernameValid = _uiState.value.username.length >= 8
+        val passwordValid =
+            _uiState.value.password.length >= 6 && _uiState.value.password.any { it.isUpperCase() }
+
+        _uiState.value = _uiState.value.copy(
+            isFormValid = usernameValid && passwordValid,
+            usernameError = if (!usernameValid && _uiState.value.usernameTouched) context.getString(
+                R.string.error_message_auth_username_length_error
+            ) else null,
+            passwordError = if (!passwordValid && _uiState.value.passwordTouched) context.getString(
+                R.string.error_message_auth_password_complexity_error
+            ) else null
+        )
     }
 
     fun clearErrorMessage() {
@@ -34,18 +57,16 @@ open class LoginViewModel : ViewModel() {
 
     fun validateLogin(context: Context, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            _uiState.value = _uiState.value.copy(isLoading = true)
 
-            delay(1000)
+            delay(2000)
 
-            if (_uiState.value.username == "user" && _uiState.value.password == "password") {
+            if (_uiState.value.isFormValid) {
                 _uiState.value = _uiState.value.copy(isLoading = false)
                 onResult(true)
             } else {
-                val errorMessage = context.getString(R.string.login_error_message)
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = errorMessage
+                    isLoading = false
                 )
                 onResult(false)
             }

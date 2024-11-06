@@ -44,6 +44,7 @@ android {
 dependencies {
     // dagger hilt
     implementation(libs.androidx.hilt.navigation.fragment)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 

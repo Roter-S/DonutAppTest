@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.R
@@ -32,13 +34,12 @@ import com.example.donutapptest.ui.components.OutlinedRoundedField
 import com.example.donutapptest.ui.components.ScaffoldNotification
 import com.example.donutapptest.ui.viewmodel.auth.LoginViewModel
 
-
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     loginViewModel: LoginViewModel
 ) {
-    val uiState by loginViewModel.uiState.collectAsState()
+    val viewModel by loginViewModel.uiState.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -46,79 +47,97 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        if (uiState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        } else {
-            Column(
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 32.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_logo),
+                contentDescription = stringResource(id = R.string.app_name),
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 32.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_logo),
-                    contentDescription = stringResource(id = R.string.app_name),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+                    .fillMaxWidth()
+            )
 
-                OutlinedRoundedField(
-                    value = uiState.username,
-                    onValueChange = { loginViewModel.onUsernameChange(it) },
-                    label = stringResource(id = R.string.login_username_label),
-                    placeholder = stringResource(id = R.string.login_username_placeholder),
-                    keyboardType = KeyboardType.Text
-                )
+            OutlinedRoundedField(
+                value = viewModel.username,
+                onValueChange = { loginViewModel.onUsernameChange(it, context) },
+                label = stringResource(id = R.string.login_username_label),
+                placeholder = stringResource(id = R.string.login_username_placeholder),
+                keyboardType = KeyboardType.Text,
+                enabled = !viewModel.isLoading,
+                errorMessage = viewModel.usernameError,
+            )
 
-                OutlinedRoundedField(
-                    value = uiState.password,
-                    onValueChange = { loginViewModel.onPasswordChange(it) },
-                    label = stringResource(id = R.string.login_password_label),
-                    placeholder = stringResource(id = R.string.login_password_placeholder),
-                    keyboardType = KeyboardType.Password,
-                )
+            OutlinedRoundedField(
+                value = viewModel.password,
+                onValueChange = { loginViewModel.onPasswordChange(it, context) },
+                label = stringResource(id = R.string.login_password_label),
+                placeholder = stringResource(id = R.string.login_password_placeholder),
+                keyboardType = KeyboardType.Password,
+                enabled = !viewModel.isLoading,
+                errorMessage = viewModel.passwordError,
+            )
 
-                Button(
-                    onClick = {
-                        loginViewModel.validateLogin(context) {
-                            if (it) {
-                                navController.navigate("home")
-                            }
+            Button(
+                onClick = {
+                    loginViewModel.validateLogin(context) {
+                        if (it) {
+                            navController.navigate("home")
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp)
-                ) {
+                    }
+                },
+                enabled = !viewModel.isLoading && viewModel.isFormValid,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp)
+            ) {
+                if (viewModel.isLoading) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .size(20.dp)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.common_loading),
+                            fontSize = 16.sp,
+                        )
+                    }
+                } else {
                     Text(
                         text = stringResource(id = R.string.login_button),
-                        modifier = Modifier.padding(10.dp)
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
-
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.login_register_prompt),
-                    )
-                    Text(
-                        text = stringResource(id = R.string.register_here),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                            .clickable {
-                                navController.navigate("register")
-                            }
-                    )
-                }
-
             }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login_register_prompt),
+                )
+                Text(
+                    text = stringResource(id = R.string.register_here),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .clickable {
+                            navController.navigate("register")
+                        }
+                )
+            }
+
         }
-        uiState.errorMessage?.let {
+        viewModel.errorMessage?.let {
             ScaffoldNotification(
                 scope = scope,
                 message = it,
@@ -136,5 +155,8 @@ fun LoginScreenPreview() {
     val loginViewModel = remember {
         LoginViewModel()
     }
-    LoginScreen(navController = navController, loginViewModel = loginViewModel)
+    LoginScreen(
+        navController = navController,
+        loginViewModel = loginViewModel,
+    )
 }

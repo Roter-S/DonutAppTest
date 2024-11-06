@@ -14,11 +14,17 @@ import com.example.donutapptest.ui.viewmodel.auth.RegisterViewModel
 import com.example.donutapptest.util.enums.Screen
 
 @Composable
-fun NavigationComponent(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavigationComponent(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+) {
     NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
         composable(Screen.LOGIN.route) {
             val loginViewModel: LoginViewModel = viewModel()
-            LoginScreen(navController = navController, loginViewModel = loginViewModel)
+            LoginScreen(
+                navController = navController,
+                loginViewModel = loginViewModel
+            )
         }
         composable(Screen.REGISTER.route) {
             val registerViewModel: RegisterViewModel = viewModel()

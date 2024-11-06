@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,21 +39,33 @@ fun OutlinedRoundedField(
     onValueChange: (String) -> Unit,
     label: String = "",
     placeholder: String = "",
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true,
+    errorMessage: String? = null
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+    val isError = errorMessage != null
+    val baseColor =
+        if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
+            alpha = 0.3f
+        )
+    val errorColor = MaterialTheme.colorScheme.error
+
+    val borderColor = if (isError) errorColor else baseColor
+    val textColor = if (isError) errorColor else baseColor
+    val iconTint = if (isError) errorColor else baseColor
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = textColor,
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
         Box(
             modifier = Modifier
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = borderColor,
                     shape = RoundedCornerShape(24.dp)
                 )
                 .background(Color.Transparent)
@@ -70,8 +81,8 @@ fun OutlinedRoundedField(
                 BasicTextField(
                     value = value,
                     onValueChange = onValueChange,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.primary),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = textColor),
+                    cursorBrush = SolidColor(textColor),
                     keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
                     visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible)
                         PasswordVisualTransformation() else VisualTransformation.None,
@@ -88,25 +99,34 @@ fun OutlinedRoundedField(
                                 Text(
                                     text = placeholder,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = textColor.copy(alpha = 0.5f),
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                             }
                             innerTextField()
                         }
-                    }
+                    },
+                    enabled = enabled
                 )
                 if (keyboardType == KeyboardType.Password) {
                     Icon(
                         imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = iconTint,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable { passwordVisible = !passwordVisible }
+                            .clickable(enabled = enabled) { passwordVisible = !passwordVisible }
                     )
                 }
             }
+        }
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 4.dp, start = 16.dp),
+            )
         }
     }
 }
