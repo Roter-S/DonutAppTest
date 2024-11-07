@@ -99,7 +99,7 @@ fun OutlinedRoundedField(
                                 Text(
                                     text = placeholder,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = textColor.copy(alpha = 0.5f),
+                                    color = textColor.copy(alpha = 0.6f),
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                             }

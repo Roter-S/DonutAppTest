@@ -4,11 +4,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.example.donutapptest"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.donutapptest"
@@ -30,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -44,9 +45,10 @@ android {
 dependencies {
     // dagger hilt
     implementation(libs.androidx.hilt.navigation.fragment)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
 
     // room
     implementation(libs.androidx.room.runtime)
@@ -54,14 +56,25 @@ dependencies {
     kapt(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    // threetenabp
+    implementation(libs.threetenabp)
+
     // retrofit
     implementation(libs.retrofit)
+    // Retrofit with Scalar Converter
+    implementation(libs.converter.scalars)
+    // Retrofit with Gson Converter
+    implementation(libs.converter.gson)
 
     //compose navigation
     implementation(libs.androidx.navigation.compose)
 
     //material icons extended
     implementation(libs.androidx.material.icons.extended)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v240)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     // compose
     implementation(libs.androidx.core.ktx)

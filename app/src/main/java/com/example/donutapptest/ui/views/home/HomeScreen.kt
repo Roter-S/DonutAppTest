@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.view
+package com.example.donutapptest.ui.views.home
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

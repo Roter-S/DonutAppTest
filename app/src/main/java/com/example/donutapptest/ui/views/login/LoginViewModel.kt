@@ -1,13 +1,16 @@
-package com.example.donutapptest.ui.viewmodel.auth
+package com.example.donutapptest.ui.views.login
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.R
+import com.example.donutapptest.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class LoginUiState(
     val username: String = "",
@@ -19,9 +22,14 @@ data class LoginUiState(
     val errorMessage: String? = null,
     val isFormValid: Boolean = false,
     val isLoading: Boolean = false,
+    val isLoginSuccessful: Boolean = false
 )
 
-open class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState
 
@@ -55,18 +63,22 @@ open class LoginViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
 
-    fun validateLogin(context: Context, onResult: (Boolean) -> Unit) {
+    fun validateLogin(onResult: (Boolean) -> Unit, context: Context) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
-
-            delay(2000)
-
-            if (_uiState.value.isFormValid) {
-                _uiState.value = _uiState.value.copy(isLoading = false)
+            delay(1000)
+            val isUserValid =
+                userRepository.checkUserPassword(_uiState.value.username, _uiState.value.password)
+            if (isUserValid) {
+                _uiState.value = _uiState.value.copy(isLoading = false, isLoginSuccessful = true)
                 onResult(true)
             } else {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false
+                    isLoading = false,
+                    isLoginSuccessful = false,
+                    errorMessage = context.getString(
+                        R.string.error_message_auth_invalid_credentials
+                    )
                 )
                 onResult(false)
             }

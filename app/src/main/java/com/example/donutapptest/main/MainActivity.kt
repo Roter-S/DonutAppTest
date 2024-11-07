@@ -1,4 +1,4 @@
-package com.example.donutapptest
+package com.example.donutapptest.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.ui.navigation.NavigationComponent
 import com.example.donutapptest.ui.theme.DonutAppTestTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
