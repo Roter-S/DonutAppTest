@@ -14,7 +14,7 @@ import com.example.donutapptest.ui.views.login.LoginScreen
 import com.example.donutapptest.ui.views.login.LoginViewModel
 import com.example.donutapptest.ui.views.register.RegisterScreen
 import com.example.donutapptest.ui.views.register.RegisterViewModel
-import com.example.donutapptest.util.enums.Screen
+import com.example.donutapptest.utils.enums.Screens
 
 @Composable
 fun NavigationComponent(
@@ -24,30 +24,30 @@ fun NavigationComponent(
 ) {
     LaunchedEffect(key1 = true) {
         if (mainViewModel.isUserLoggedIn()) {
-            navController.navigate(Screen.HOME.route) {
+            navController.navigate(Screens.HOME.route) {
                 popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true
             }
         } else {
-            navController.navigate(Screen.LOGIN.route) {
+            navController.navigate(Screens.LOGIN.route) {
                 popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true
             }
         }
     }
-    NavHost(navController = navController, startDestination = Screen.LOGIN.route) {
-        composable(Screen.LOGIN.route) {
+    NavHost(navController = navController, startDestination = Screens.LOGIN.route) {
+        composable(Screens.LOGIN.route) {
             val loginViewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
                 navController = navController,
                 loginViewModel = loginViewModel
             )
         }
-        composable(Screen.REGISTER.route) {
+        composable(Screens.REGISTER.route) {
             val registerViewModel: RegisterViewModel = viewModel()
             RegisterScreen(navController = navController, registerViewModel = registerViewModel)
         }
-        composable(Screen.HOME.route) {
+        composable(Screens.HOME.route) {
             HomeScreen()
         }
     }

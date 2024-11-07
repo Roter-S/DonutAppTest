@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.R
 import com.example.donutapptest.data.repository.UserRepository
+import com.example.donutapptest.utils.NotificationManager
+import com.example.donutapptest.utils.enums.Alerts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,13 +15,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class LoginUiState(
-    val username: String = "",
+    val username: String = "bsosof34",
     val usernameError: String? = null,
     val usernameTouched: Boolean = false,
-    val password: String = "",
+    val password: String = "Asdfghjk",
     val passwordError: String? = null,
     val passwordTouched: Boolean = false,
-    val errorMessage: String? = null,
     val isFormValid: Boolean = false,
     val isLoading: Boolean = false,
     val isLoginSuccessful: Boolean = false
@@ -59,10 +60,6 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun clearErrorMessage() {
-        _uiState.value = _uiState.value.copy(errorMessage = null)
-    }
-
     fun validateLogin(onResult: (Boolean) -> Unit, context: Context) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -75,10 +72,11 @@ class LoginViewModel @Inject constructor(
             } else {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    isLoginSuccessful = false,
-                    errorMessage = context.getString(
-                        R.string.error_message_auth_invalid_credentials
-                    )
+                    isLoginSuccessful = false
+                )
+                NotificationManager.showNotification(
+                    message = context.getString(R.string.error_message_auth_invalid_credentials),
+                    type = Alerts.ERROR.name
                 )
                 onResult(false)
             }

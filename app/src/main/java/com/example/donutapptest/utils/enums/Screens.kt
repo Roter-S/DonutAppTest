@@ -1,6 +1,6 @@
-package com.example.donutapptest.util.enums
+package com.example.donutapptest.utils.enums
 
-enum class Screen(val route: String) {
+enum class Screens(val route: String) {
     LOGIN("login"),
     REGISTER("register"),
     HOME("home");

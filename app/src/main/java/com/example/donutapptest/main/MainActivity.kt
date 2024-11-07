@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.donutapptest.ui.components.ScaffoldNotificationObserver
 import com.example.donutapptest.ui.navigation.NavigationComponent
 import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) { innerPadding ->
+                    ScaffoldNotificationObserver()
                     NavigationComponent(
                         navController = navController,
                         modifier = Modifier.padding(innerPadding)
