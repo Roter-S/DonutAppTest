@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.R
 import com.example.donutapptest.data.repository.UserRepository
+import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.utils.NotificationManager
 import com.example.donutapptest.utils.enums.Alerts
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,10 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class LoginUiState(
-    val username: String = "bsosof34",
+    val username: String = "",
     val usernameError: String? = null,
     val usernameTouched: Boolean = false,
-    val password: String = "Asdfghjk",
+    val password: String = "",
     val passwordError: String? = null,
     val passwordTouched: Boolean = false,
     val isFormValid: Boolean = false,
@@ -28,7 +29,8 @@ data class LoginUiState(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val sessionManager: SessionManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -51,10 +53,10 @@ class LoginViewModel @Inject constructor(
 
         _uiState.value = _uiState.value.copy(
             isFormValid = usernameValid && passwordValid,
-            usernameError = if (!usernameValid && _uiState.value.usernameTouched) context.getString(
+            usernameError = if (!usernameValid && _uiState.value.usernameTouched && _uiState.value.username.isNotEmpty()) context.getString(
                 R.string.error_message_auth_username_length_error
             ) else null,
-            passwordError = if (!passwordValid && _uiState.value.passwordTouched) context.getString(
+            passwordError = if (!passwordValid && _uiState.value.passwordTouched && _uiState.value.password.isNotEmpty()) context.getString(
                 R.string.error_message_auth_password_complexity_error
             ) else null
         )
@@ -67,6 +69,7 @@ class LoginViewModel @Inject constructor(
             val isUserValid =
                 userRepository.checkUserPassword(_uiState.value.username, _uiState.value.password)
             if (isUserValid) {
+                sessionManager.setLoggedIn(true)
                 _uiState.value = _uiState.value.copy(isLoading = false, isLoginSuccessful = true)
                 onResult(true)
             } else {

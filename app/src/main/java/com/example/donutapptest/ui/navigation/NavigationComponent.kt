@@ -1,10 +1,18 @@
 package com.example.donutapptest.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,20 +30,23 @@ fun NavigationComponent(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(key1 = true) {
-        if (mainViewModel.isUserLoggedIn()) {
-            navController.navigate(Screens.HOME.route) {
-                popUpTo(navController.graph.startDestinationId)
-                launchSingleTop = true
-            }
-        } else {
-            navController.navigate(Screens.LOGIN.route) {
-                popUpTo(navController.graph.startDestinationId)
-                launchSingleTop = true
-            }
+    var initialRoute: String? by remember { mutableStateOf(null) }
+    val isUserLoggedIn by mainViewModel.isUserLoggedInFlow.collectAsState()
+
+    LaunchedEffect(isUserLoggedIn) {
+        if (isUserLoggedIn != null && initialRoute == null) {
+            initialRoute = if (isUserLoggedIn == true) Screens.HOME.route else Screens.LOGIN.route
         }
     }
-    NavHost(navController = navController, startDestination = Screens.LOGIN.route) {
+
+    if (initialRoute == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    NavHost(navController = navController, startDestination = initialRoute ?: Screens.LOGIN.route) {
         composable(Screens.LOGIN.route) {
             val loginViewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
@@ -44,11 +55,11 @@ fun NavigationComponent(
             )
         }
         composable(Screens.REGISTER.route) {
-            val registerViewModel: RegisterViewModel = viewModel()
+            val registerViewModel: RegisterViewModel = hiltViewModel()
             RegisterScreen(navController = navController, registerViewModel = registerViewModel)
         }
         composable(Screens.HOME.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
     }
 }

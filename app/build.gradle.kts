@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("dagger.hilt.android.plugin")
 }
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.example.donutapptest"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -43,17 +43,17 @@ android {
 }
 
 dependencies {
-    // dagger hilt
+    // hilt
     implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.compiler)
 
     // room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.room.compiler)
-    kapt(libs.androidx.room.room.compiler)
+    ksp(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     // threetenabp
@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx.v240)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
+
     // compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -92,8 +95,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-kapt {
-    correctErrorTypes = true
 }

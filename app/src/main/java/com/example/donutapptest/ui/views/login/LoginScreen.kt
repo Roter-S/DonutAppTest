@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -18,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.R
 import com.example.donutapptest.data.repository.FakeUserRepository
+import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.ui.components.FormContainer
 import com.example.donutapptest.ui.components.LoadingButton
 import com.example.donutapptest.ui.components.NavigationPromptRow
@@ -67,7 +69,10 @@ fun LoginScreen(
             onClick = {
                 loginViewModel.validateLogin(onResult = { isLoginSuccessful ->
                     if (isLoginSuccessful) {
-                        navController.navigate("home")
+                        navController.navigate("home") {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 }, context = context)
             },
@@ -90,8 +95,10 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     val navController = rememberNavController()
-    val fakeRepository = FakeUserRepository()
-    val loginViewModel = LoginViewModel(fakeRepository)
+    val context = LocalContext.current
+    val fakeRepository = remember { FakeUserRepository() }
+    val fakeSessionManager = remember { SessionManager(context) }
+    val loginViewModel = remember { LoginViewModel(fakeRepository, fakeSessionManager) }
     LoginScreen(
         navController = navController,
         loginViewModel = loginViewModel,

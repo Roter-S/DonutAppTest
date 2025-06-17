@@ -35,4 +35,17 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
 
         return ChronoUnit.HOURS.between(lastLoginTime, currentTime) <= 24
     }
+
+    override suspend fun isUserRegistered(email: String): Boolean {
+        return userDao.findUserByUsername(email) != null
+    }
+
+    override suspend fun registerUser(firstName: String, lastName: String, email: String, password: String) {
+        val user = User(username = email, password = password)
+        userDao.insertUser(user)
+    }
+
+    override suspend fun getMostRecentUser(): User? {
+        return userDao.getMostRecentUser()
+    }
 }

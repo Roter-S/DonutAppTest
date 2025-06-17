@@ -8,4 +8,7 @@ interface UserRepository {
     suspend fun checkUserPassword(username: String, password: String): Boolean
     suspend fun isUserLoggedIn(): Boolean
     fun checkSessionValidity(lastLogin: String): Boolean
+    suspend fun isUserRegistered(email: String): Boolean
+    suspend fun registerUser(firstName: String, lastName: String, email: String, password: String)
+    suspend fun getMostRecentUser(): User?
 }
