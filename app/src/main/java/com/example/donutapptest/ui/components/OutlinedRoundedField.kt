@@ -57,16 +57,12 @@ fun OutlinedRoundedField(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = label,
-            color = textColor,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            text = label, color = textColor, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
         Box(
             modifier = Modifier
                 .border(
-                    width = 1.dp,
-                    color = borderColor,
-                    shape = RoundedCornerShape(24.dp)
+                    width = 1.dp, color = borderColor, shape = RoundedCornerShape(24.dp)
                 )
                 .background(Color.Transparent)
                 .fillMaxWidth()
@@ -84,8 +80,7 @@ fun OutlinedRoundedField(
                     textStyle = MaterialTheme.typography.bodyLarge.copy(color = textColor),
                     cursorBrush = SolidColor(textColor),
                     keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-                    visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible)
-                        PasswordVisualTransformation() else VisualTransformation.None,
+                    visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -115,8 +110,7 @@ fun OutlinedRoundedField(
                         tint = iconTint,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable(enabled = enabled) { passwordVisible = !passwordVisible }
-                    )
+                            .clickable(enabled = enabled) { passwordVisible = !passwordVisible })
                 }
             }
         }

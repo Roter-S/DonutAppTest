@@ -32,12 +32,10 @@ fun LoadingButton(
     ) {
         if (isLoading) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
             ) {
                 CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    modifier = Modifier
+                    strokeWidth = 2.dp, modifier = Modifier
                         .padding(end = 8.dp)
                         .size(20.dp)
                 )
@@ -48,9 +46,7 @@ fun LoadingButton(
             }
         } else {
             Text(
-                text = text,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(8.dp)
+                text = text, fontSize = 16.sp, modifier = Modifier.padding(8.dp)
             )
         }
     }

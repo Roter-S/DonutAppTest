@@ -15,13 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val sessionManager: SessionManager
+    private val userRepository: UserRepository, private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
 
-    val isLoggedIn: StateFlow<Boolean?> = sessionManager.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val isLoggedIn: StateFlow<Boolean?> =
+        sessionManager.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     init {
         viewModelScope.launch {

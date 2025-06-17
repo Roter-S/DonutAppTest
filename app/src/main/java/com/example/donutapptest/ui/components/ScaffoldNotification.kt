@@ -47,18 +47,19 @@ fun ScaffoldNotification(
     LaunchedEffect(key1 = message) {
         scope.launch {
             snackBarHostState.showSnackbar(
-                message = message,
-                duration = SnackbarDuration.Short
+                message = message, duration = SnackbarDuration.Short
             )
         }
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .zIndex(1f)) {
-        SnackbarHost(hostState = snackBarHostState,
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f)
+    ) {
+        SnackbarHost(
+            hostState = snackBarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
             snackbar = {
                 CustomSnackbarContent(
                     message = message, onDismiss = onDismiss, type = type

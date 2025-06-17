@@ -74,8 +74,7 @@ class LoginViewModel @Inject constructor(
                 onResult(true)
             } else {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    isLoginSuccessful = false
+                    isLoading = false, isLoginSuccessful = false
                 )
                 NotificationManager.showNotification(
                     message = context.getString(R.string.error_message_auth_invalid_credentials),

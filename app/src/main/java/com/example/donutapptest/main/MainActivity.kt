@@ -32,8 +32,7 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     ScaffoldNotificationObserver()
                     NavigationComponent(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        navController = navController, modifier = Modifier.padding(innerPadding)
                     )
                 }
             }

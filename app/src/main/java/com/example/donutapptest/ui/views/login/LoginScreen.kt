@@ -27,8 +27,7 @@ import com.example.donutapptest.ui.components.OutlinedRoundedField
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController,
-    loginViewModel: LoginViewModel
+    navController: NavHostController, loginViewModel: LoginViewModel
 ) {
     val uiState by loginViewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -38,8 +37,7 @@ fun LoginScreen(
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = stringResource(id = R.string.app_name),
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedRoundedField(

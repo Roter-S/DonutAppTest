@@ -27,8 +27,7 @@ import com.example.donutapptest.ui.components.OutlinedRoundedField
 
 @Composable
 fun RegisterScreen(
-    navController: NavHostController,
-    registerViewModel: RegisterViewModel
+    navController: NavHostController, registerViewModel: RegisterViewModel
 ) {
     val uiState by registerViewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -38,8 +37,7 @@ fun RegisterScreen(
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = stringResource(id = R.string.app_name),
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
         OutlinedRoundedField(
             value = uiState.firstName,

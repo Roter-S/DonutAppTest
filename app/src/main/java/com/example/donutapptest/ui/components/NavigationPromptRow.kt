@@ -15,10 +15,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun NavigationPromptRow(
-    navController: NavController,
-    promptTextId: Int,
-    actionTextId: Int,
-    navigationRoute: String
+    navController: NavController, promptTextId: Int, actionTextId: Int, navigationRoute: String
 ) {
     Row(
         modifier = Modifier
@@ -36,7 +33,6 @@ fun NavigationPromptRow(
                 .padding(start = 4.dp)
                 .clickable {
                     navController.navigate(navigationRoute)
-                }
-        )
+                })
     }
 }

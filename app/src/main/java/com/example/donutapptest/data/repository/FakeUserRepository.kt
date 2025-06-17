@@ -19,7 +19,9 @@ class FakeUserRepository : UserRepository {
         return users.any { it.username == email }
     }
 
-    override suspend fun registerUser(firstName: String, lastName: String, email: String, password: String) {
+    override suspend fun registerUser(
+        firstName: String, lastName: String, email: String, password: String
+    ) {
         users.add(User(username = email, password = password))
     }
 

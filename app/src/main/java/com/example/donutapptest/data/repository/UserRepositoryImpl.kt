@@ -24,8 +24,7 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
 
     override suspend fun isUserLoggedIn(): Boolean {
         val recentUser = userDao.getMostRecentUser()
-        return recentUser?.lastLogin != null &&
-                checkSessionValidity(recentUser.lastLogin)
+        return recentUser?.lastLogin != null && checkSessionValidity(recentUser.lastLogin)
     }
 
     override fun checkSessionValidity(lastLogin: String): Boolean {
@@ -40,7 +39,9 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
         return userDao.findUserByUsername(email) != null
     }
 
-    override suspend fun registerUser(firstName: String, lastName: String, email: String, password: String) {
+    override suspend fun registerUser(
+        firstName: String, lastName: String, email: String, password: String
+    ) {
         val user = User(username = email, password = password)
         userDao.insertUser(user)
     }

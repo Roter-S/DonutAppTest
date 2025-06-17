@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FormContainer(
-    focusManager: FocusManager,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    focusManager: FocusManager, modifier: Modifier = Modifier, content: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -25,8 +23,7 @@ fun FormContainer(
                 detectTapGestures(onTap = {
                     focusManager.clearFocus()
                 })
-            }
-    ) {
+            }) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)

@@ -59,14 +59,12 @@ fun HomeScreen(
         }
     }
     ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
+        drawerState = drawerState, drawerContent = {
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
-                    .height(220.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .height(220.dp), horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
@@ -79,26 +77,20 @@ fun HomeScreen(
                         homeViewModel.logout {
                             onLogout?.invoke()
                         }
-                    },
-                    modifier = Modifier.padding(top = 32.dp)
+                    }, modifier = Modifier.padding(top = 32.dp)
                 ) {
                     Text("Cerrar sesión")
                 }
             }
-        }
-    ) {
+        }) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text("Home") },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Menú")
-                        }
+                TopAppBar(title = { Text("Home") }, navigationIcon = {
+                    IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
                     }
-                )
-            }
-        ) { innerPadding ->
+                })
+            }) { innerPadding ->
             Text(
                 text = "Welcome to Home Screen!",
                 modifier = Modifier

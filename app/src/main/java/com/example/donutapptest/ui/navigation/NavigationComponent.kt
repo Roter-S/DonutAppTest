@@ -50,8 +50,7 @@ fun NavigationComponent(
         composable(Screens.LOGIN.route) {
             val loginViewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
-                navController = navController,
-                loginViewModel = loginViewModel
+                navController = navController, loginViewModel = loginViewModel
             )
         }
         composable(Screens.REGISTER.route) {

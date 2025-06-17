@@ -16,10 +16,8 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        return Retrofit.Builder().baseUrl("https://api.example.com/")
+            .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     @Provides

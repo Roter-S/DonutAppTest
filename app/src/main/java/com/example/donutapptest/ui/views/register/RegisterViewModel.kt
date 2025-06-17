@@ -6,14 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.data.repository.UserRepository
 import com.example.donutapptest.data.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-// Estado de la UI para el registro
- data class RegisterUiState(
+data class RegisterUiState(
     val firstName: String = "",
     val firstNameError: String? = null,
     val firstNameTouched: Boolean = false,
@@ -36,34 +35,40 @@ import java.util.regex.Pattern
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val sessionManager: SessionManager
+    private val userRepository: UserRepository, private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState
 
     fun onFirstNameChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(firstName = newValue, firstNameTouched = true, firstNameError = null)
+        _uiState.value = _uiState.value.copy(
+            firstName = newValue, firstNameTouched = true, firstNameError = null
+        )
         validateForm()
     }
 
     fun onLastNameChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(lastName = newValue, lastNameTouched = true, lastNameError = null)
+        _uiState.value =
+            _uiState.value.copy(lastName = newValue, lastNameTouched = true, lastNameError = null)
         validateForm()
     }
 
     fun onEmailChange(newValue: String, context: Context) {
-        _uiState.value = _uiState.value.copy(email = newValue, emailTouched = true, emailError = null)
+        _uiState.value =
+            _uiState.value.copy(email = newValue, emailTouched = true, emailError = null)
         validateForm()
     }
 
     fun onPasswordChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(password = newValue, passwordTouched = true, passwordError = null)
+        _uiState.value =
+            _uiState.value.copy(password = newValue, passwordTouched = true, passwordError = null)
         validateForm()
     }
 
     fun onConfirmPasswordChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(confirmPassword = newValue, confirmPasswordTouched = true, confirmPasswordError = null)
+        _uiState.value = _uiState.value.copy(
+            confirmPassword = newValue, confirmPasswordTouched = true, confirmPasswordError = null
+        )
         validateForm()
     }
 
@@ -118,8 +123,7 @@ class RegisterViewModel @Inject constructor(
             val userExists = userRepository.isUserRegistered(state.email)
             if (userExists) {
                 _uiState.value = state.copy(
-                    isLoading = false,
-                    emailError = "El usuario ya está registrado"
+                    isLoading = false, emailError = "El usuario ya está registrado"
                 )
                 onResult(false)
             } else {
