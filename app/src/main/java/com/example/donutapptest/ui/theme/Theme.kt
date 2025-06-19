@@ -9,18 +9,26 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = BluePrimary,
-    secondary = DarkBlueSecondary,
-    tertiary = LightBlueTertiary,
-    background = DarkBlueSecondary,
-    surface = DarkerPrimary,
-    onPrimary = OnPrimaryColor,
-    onSecondary = OnSecondaryColor,
-    onTertiary = OnTertiaryColor,
-    onBackground = OnBackgroundColor,
-    onSurface = LightBlueTertiary
+    // Colores principales usando los acentos del logo
+    primary = DarkAccentPrimary,
+    secondary = DarkAccentSecondary,
+    tertiary = DarkAccentTertiary,
+    
+    background = DarkBackgroundColor,
+    surface = DarkSurfaceColor,
+    surfaceVariant = DarkSurfaceVariantColor,
+    outline = DarkOutlineColor,
+    
+    // Colores de texto optimizados para dark theme
+    onPrimary = Color(0xFFFFFFFF),
+    onSecondary = Color(0xFF000000),
+    onTertiary = Color(0xFFFFFFFF),
+    onBackground = DarkOnBackgroundColor,
+    onSurface = DarkOnSurfaceColor,
+    onSurfaceVariant = DarkOnSurfaceVariantColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -40,7 +48,8 @@ private val LightColorScheme = lightColorScheme(
 fun DonutAppTestTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true, content: @Composable () -> Unit
+    dynamicColor: Boolean = false, // Cambiado a false para usar nuestra paleta personalizada
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
