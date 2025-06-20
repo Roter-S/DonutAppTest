@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DonutAppTest</string>
+
+    <!-- Screen Login -->
+    <string name="login_username_label">Usuario</string>
+    <string name="login_username_placeholder">Introduce tu usuario</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_password_placeholder">Introduce tu contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_register_prompt">¿No tienes una cuenta?</string>
+    <string name="register_here">Regístrate aquí</string>
+
+    <!-- Screen Register -->
+    <string name="register_firstname_label">Nombre</string>
+    <string name="register_firstname_placeholder">Ingresa tu nombre</string>
+    <string name="register_lastname_label">Apellido</string>
+    <string name="register_lastname_placeholder">Ingresa tu apellido</string>
+    <string name="register_email_label">Correo electrónico</string>
+    <string name="register_email_placeholder">ejemplo@correo.com</string>
+    <string name="register_username_label">Usuario</string>
+    <string name="register_username_placeholder">Ingrese su usuario</string>
+    <string name="register_password_label">Contraseña</string>
+    <string name="register_password_placeholder">Crea una contraseña</string>
+    <string name="register_confirm_password_label">Confirmar Contraseña</string>
+    <string name="register_confirm_password_placeholder">Repite la contraseña</string>
+    <string name="register_login_prompt">¿Ya tienes una cuenta?</string>
+    <string name="register_login_here">Inicia sesión aquí</string>
+    <string name="register_button">Registrarse</string>
+
+    <!-- Bottom Navigation -->
+    <string name="bottom_nav_home">Inicio</string>
+    <string name="bottom_nav_favorites">Favoritos</string>
+    <string name="bottom_nav_cart">Carrito</string>
+
+    <!-- Navigation -->
+    <string name="nav_logout">Cerrar sesión</string>
+    <string name="nav_back">Volver</string>
+
+    <!-- commons -->
+    <string name="common_loading">Cargando…</string>
+
+    <!-- errors -->
+    <string name="error_message_auth_invalid_credentials">
+        Nombre de usuario o contraseña no válidos
+    </string>
+    <string name="error_message_auth_username_length_error">
+        El nombre de usuario debe tener al menos 8 caracteres
+    </string>
+    <string name="error_message_auth_password_complexity_error">
+        La contraseña debe tener al menos 6 caracteres y contener una letra mayúscula
+    </string>
+</resources>

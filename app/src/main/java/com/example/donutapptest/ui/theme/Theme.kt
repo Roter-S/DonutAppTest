@@ -1,6 +1,5 @@
 package com.example.donutapptest.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,33 +10,85 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// Material 3 Expressive - Light Color Scheme
+private val ExpressiveLightColorScheme = lightColorScheme(
+    primary = ExpressivePrimary,
+    onPrimary = ExpressiveOnPrimary,
+    primaryContainer = ExpressivePrimaryContainer,
+    onPrimaryContainer = ExpressiveOnPrimaryContainer,
+    
+    secondary = ExpressiveSecondary,
+    onSecondary = ExpressiveOnSecondary,
+    secondaryContainer = ExpressiveSecondaryContainer,
+    onSecondaryContainer = ExpressiveOnSecondaryContainer,
+    
+    tertiary = ExpressiveTertiary,
+    onTertiary = ExpressiveOnTertiary,
+    tertiaryContainer = ExpressiveTertiaryContainer,
+    onTertiaryContainer = ExpressiveOnTertiaryContainer,
+    
+    surface = ExpressiveSurface,
+    onSurface = ExpressiveOnSurface,
+    surfaceVariant = ExpressiveSurfaceVariant,
+    onSurfaceVariant = ExpressiveOnSurfaceVariant,
+    outline = ExpressiveOutline,
+    outlineVariant = ExpressiveOutlineVariant,
+    
+    background = ExpressiveBackground,
+    onBackground = ExpressiveOnBackground,
+    
+    error = ExpressiveError,
+    onError = ExpressiveOnError,
+    errorContainer = ExpressiveErrorContainer,
+    onErrorContainer = ExpressiveOnErrorContainer,
+    
+    inversePrimary = ExpressiveInversePrimary,
+    inverseSurface = ExpressiveInverseSurface,
+    inverseOnSurface = ExpressiveInverseOnSurface
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+// Material 3 Expressive - Dark Color Scheme
+private val ExpressiveDarkColorScheme = darkColorScheme(
+    primary = ExpressiveDarkPrimary,
+    onPrimary = ExpressiveDarkOnPrimary,
+    primaryContainer = ExpressiveDarkPrimaryContainer,
+    onPrimaryContainer = ExpressiveDarkOnPrimaryContainer,
+    
+    secondary = ExpressiveDarkSecondary,
+    onSecondary = ExpressiveDarkOnSecondary,
+    secondaryContainer = ExpressiveDarkSecondaryContainer,
+    onSecondaryContainer = ExpressiveDarkOnSecondaryContainer,
+    
+    tertiary = ExpressiveDarkTertiary,
+    onTertiary = ExpressiveDarkOnTertiary,
+    tertiaryContainer = ExpressiveDarkTertiaryContainer,
+    onTertiaryContainer = ExpressiveDarkOnTertiaryContainer,
+    
+    surface = ExpressiveDarkSurface,
+    onSurface = ExpressiveDarkOnSurface,
+    surfaceVariant = ExpressiveDarkSurfaceVariant,
+    onSurfaceVariant = ExpressiveDarkOnSurfaceVariant,
+    outline = ExpressiveDarkOutline,
+    outlineVariant = ExpressiveDarkOutlineVariant,
+    
+    background = ExpressiveDarkBackground,
+    onBackground = ExpressiveDarkOnBackground,
+    
+    error = ExpressiveDarkError,
+    onError = ExpressiveDarkOnError,
+    errorContainer = ExpressiveDarkErrorContainer,
+    onErrorContainer = ExpressiveDarkOnErrorContainer,
+    
+    inversePrimary = ExpressiveInversePrimary,
+    inverseSurface = ExpressiveInverseSurface,
+    inverseOnSurface = ExpressiveInverseOnSurface
 )
 
 @Composable
 fun DonutAppTestTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Mantenemos false para usar nuestra paleta expresiva personalizada
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -45,9 +96,8 @@ fun DonutAppTestTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> ExpressiveDarkColorScheme
+        else -> ExpressiveLightColorScheme
     }
 
     MaterialTheme(

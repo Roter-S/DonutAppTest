@@ -2,18 +2,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.example.donutapptest"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.donutapptest"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -30,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -42,18 +43,41 @@ android {
 }
 
 dependencies {
-    // dagger hilt
+    // hilt
+    implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.compiler)
 
     // room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.room.compiler)
-    kapt(libs.androidx.room.room.compiler)
+    ksp(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    // threetenabp
+    implementation(libs.threetenabp)
 
     // retrofit
     implementation(libs.retrofit)
+    // Retrofit with Scalar Converter
+    implementation(libs.converter.scalars)
+    // Retrofit with Gson Converter
+    implementation(libs.converter.gson)
+
+    //compose navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //material icons extended
+    implementation(libs.androidx.material.icons.extended)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v240)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
 
     // compose
     implementation(libs.androidx.core.ktx)
@@ -71,8 +95,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-kapt {
-    correctErrorTypes = true
 }
