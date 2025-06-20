@@ -70,6 +70,7 @@ class LoginViewModel @Inject constructor(
                 userRepository.checkUserPassword(_uiState.value.username, _uiState.value.password)
             if (isUserValid) {
                 sessionManager.setLoggedIn(true)
+                sessionManager.setUsername(_uiState.value.username)
                 _uiState.value = _uiState.value.copy(isLoading = false, isLoginSuccessful = true)
                 onResult(true)
             } else {
