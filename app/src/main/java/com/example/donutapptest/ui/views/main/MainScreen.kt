@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -18,6 +19,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +48,7 @@ import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import com.example.donutapptest.ui.views.cart.CartScreen
 import com.example.donutapptest.ui.views.favorites.FavoritesScreen
 import com.example.donutapptest.ui.views.home.HomeScreen
-import com.example.donutapptest.utils.enums.BottomNavRoutes
+import com.example.donutapptest.utils.enums.Screens
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,7 +56,7 @@ fun MainScreen(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
     onLogout: (() -> Unit)? = null
 ) {
-    var currentRoute by remember { mutableStateOf(BottomNavRoutes.HOME.route) }
+    var currentRoute by remember { mutableStateOf(Screens.HOME.route) }
     val username by mainScreenViewModel.username.collectAsState()
     val logoutHandler: () -> Unit = {
         onLogout?.let { mainScreenViewModel.logout(it) }
@@ -79,9 +81,9 @@ fun MainScreenContent(
     var menuExpanded by remember { mutableStateOf(false) }
 
     val title = when (currentRoute) {
-        BottomNavRoutes.HOME.route -> stringResource(R.string.bottom_nav_home)
-        BottomNavRoutes.FAVORITES.route -> stringResource(R.string.bottom_nav_favorites)
-        BottomNavRoutes.CART.route -> stringResource(R.string.bottom_nav_cart)
+        Screens.HOME.route -> stringResource(R.string.bottom_nav_home)
+        Screens.FAVORITES.route -> stringResource(R.string.bottom_nav_favorites)
+        Screens.CART.route -> stringResource(R.string.bottom_nav_cart)
         else -> ""
     }
 
@@ -113,7 +115,7 @@ fun MainScreenContent(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                 style = MaterialTheme.typography.labelLarge,
                             )
-                            Divider()
+                            HorizontalDivider()
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.nav_logout)) },
                                 onClick = {
@@ -122,7 +124,7 @@ fun MainScreenContent(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Default.Logout,
+                                        imageVector = Icons.AutoMirrored.Filled.Logout,
                                         contentDescription = stringResource(R.string.nav_logout)
                                     )
                                 }
@@ -148,9 +150,9 @@ fun MainScreenContent(
             .padding(innerPadding)
             .padding(16.dp)
         when (currentRoute) {
-            BottomNavRoutes.HOME.route -> HomeScreen(modifier = modifier)
-            BottomNavRoutes.FAVORITES.route -> FavoritesScreen(modifier = modifier)
-            BottomNavRoutes.CART.route -> CartScreen(modifier = modifier)
+            Screens.HOME.route -> HomeScreen(modifier = modifier)
+            Screens.FAVORITES.route -> FavoritesScreen(modifier = modifier)
+            Screens.CART.route -> CartScreen(modifier = modifier)
         }
     }
 }
@@ -161,7 +163,7 @@ fun MainScreenPreview() {
     DonutAppTestTheme {
         MainScreenContent(
             username = "Preview User",
-            currentRoute = BottomNavRoutes.HOME.route,
+            currentRoute = Screens.HOME.route,
             onNavigate = {},
             onLogout = {}
         )

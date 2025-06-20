@@ -12,10 +12,16 @@
     <string name="register_here">Register here</string>
 
     <!-- Screen Register -->
+    <string name="register_firstname_label">First Name</string>
+    <string name="register_firstname_placeholder">Enter your first name</string>
+    <string name="register_lastname_label">Last Name</string>
+    <string name="register_lastname_placeholder">Enter your last name</string>
+    <string name="register_email_label">Email</string>
+    <string name="register_email_placeholder">example@email.com</string>
     <string name="register_username_label">Username</string>
     <string name="register_username_placeholder">Enter your username</string>
     <string name="register_password_label">Password</string>
-    <string name="register_password_placeholder">Enter your password</string>
+    <string name="register_password_placeholder">Create a password</string>
     <string name="register_confirm_password_label">Confirm Password</string>
     <string name="register_confirm_password_placeholder">Re-enter your password</string>
     <string name="register_login_prompt">Already have an account?</string>

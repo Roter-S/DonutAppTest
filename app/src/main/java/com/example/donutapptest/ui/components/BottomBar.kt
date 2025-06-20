@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.donutapptest.R
-import com.example.donutapptest.utils.enums.BottomNavRoutes
+import com.example.donutapptest.utils.enums.Screens
 
 @Composable
 fun BottomBar(
@@ -23,17 +23,17 @@ fun BottomBar(
 ) {
     val items = listOf(
         BottomNavItem(
-            route = BottomNavRoutes.HOME.route,
+            route = Screens.HOME.route,
             title = stringResource(R.string.bottom_nav_home),
             icon = Icons.Default.Home
         ),
         BottomNavItem(
-            route = BottomNavRoutes.FAVORITES.route,
+            route = Screens.FAVORITES.route,
             title = stringResource(R.string.bottom_nav_favorites),
             icon = Icons.Default.Favorite
         ),
         BottomNavItem(
-            route = BottomNavRoutes.CART.route,
+            route = Screens.CART.route,
             title = stringResource(R.string.bottom_nav_cart),
             icon = Icons.Default.ShoppingCart
         )

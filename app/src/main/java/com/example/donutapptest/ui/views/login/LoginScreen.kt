@@ -22,6 +22,7 @@ import com.example.donutapptest.data.repository.FakeUserRepository
 import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.ui.components.FormContainer
 import com.example.donutapptest.ui.components.LoadingButton
+import com.example.donutapptest.ui.components.LogoImage
 import com.example.donutapptest.ui.components.NavigationPromptRow
 import com.example.donutapptest.ui.components.OutlinedRoundedField
 
@@ -34,11 +35,7 @@ fun LoginScreen(
     val focusManager = LocalFocusManager.current
 
     FormContainer(focusManager = focusManager) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_logo),
-            contentDescription = stringResource(id = R.string.app_name),
-            modifier = Modifier.fillMaxWidth()
-        )
+        LogoImage()
 
         OutlinedRoundedField(
             value = uiState.username,

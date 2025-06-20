@@ -22,6 +22,7 @@ import com.example.donutapptest.data.repository.FakeUserRepository
 import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.ui.components.FormContainer
 import com.example.donutapptest.ui.components.LoadingButton
+import com.example.donutapptest.ui.components.LogoImage
 import com.example.donutapptest.ui.components.NavigationPromptRow
 import com.example.donutapptest.ui.components.OutlinedRoundedField
 
@@ -34,16 +35,12 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current
 
     FormContainer(focusManager = focusManager) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_logo),
-            contentDescription = stringResource(id = R.string.app_name),
-            modifier = Modifier.fillMaxWidth()
-        )
+        LogoImage()
         OutlinedRoundedField(
             value = uiState.firstName,
             onValueChange = { registerViewModel.onFirstNameChange(it) },
-            label = "Nombre",
-            placeholder = "Ingresa tu nombre",
+            label = stringResource(id = R.string.register_firstname_label),
+            placeholder = stringResource(id = R.string.register_firstname_placeholder),
             keyboardType = KeyboardType.Text,
             enabled = !uiState.isLoading,
             errorMessage = uiState.firstNameError,
@@ -51,8 +48,8 @@ fun RegisterScreen(
         OutlinedRoundedField(
             value = uiState.lastName,
             onValueChange = { registerViewModel.onLastNameChange(it) },
-            label = "Apellido",
-            placeholder = "Ingresa tu apellido",
+            label = stringResource(id = R.string.register_lastname_label),
+            placeholder = stringResource(id = R.string.register_lastname_placeholder),
             keyboardType = KeyboardType.Text,
             enabled = !uiState.isLoading,
             errorMessage = uiState.lastNameError,
@@ -60,8 +57,8 @@ fun RegisterScreen(
         OutlinedRoundedField(
             value = uiState.email,
             onValueChange = { registerViewModel.onEmailChange(it, context) },
-            label = "Correo electrónico",
-            placeholder = "ejemplo@correo.com",
+            label = stringResource(id = R.string.register_email_label),
+            placeholder = stringResource(id = R.string.register_email_placeholder),
             keyboardType = KeyboardType.Email,
             enabled = !uiState.isLoading,
             errorMessage = uiState.emailError,
@@ -69,8 +66,8 @@ fun RegisterScreen(
         OutlinedRoundedField(
             value = uiState.password,
             onValueChange = { registerViewModel.onPasswordChange(it) },
-            label = "Contraseña",
-            placeholder = "Crea una contraseña",
+            label = stringResource(id = R.string.register_password_label),
+            placeholder = stringResource(id = R.string.register_password_placeholder),
             keyboardType = KeyboardType.Password,
             enabled = !uiState.isLoading,
             errorMessage = uiState.passwordError,
@@ -78,14 +75,14 @@ fun RegisterScreen(
         OutlinedRoundedField(
             value = uiState.confirmPassword,
             onValueChange = { registerViewModel.onConfirmPasswordChange(it) },
-            label = "Confirmar contraseña",
-            placeholder = "Repite la contraseña",
+            label = stringResource(id = R.string.register_confirm_password_label),
+            placeholder = stringResource(id = R.string.register_confirm_password_placeholder),
             keyboardType = KeyboardType.Password,
             enabled = !uiState.isLoading,
             errorMessage = uiState.confirmPasswordError,
         )
         LoadingButton(
-            text = "Registrarse",
+            text = stringResource(id = R.string.register_button),
             isLoading = uiState.isLoading,
             isEnabled = uiState.isFormValid,
             onClick = {
