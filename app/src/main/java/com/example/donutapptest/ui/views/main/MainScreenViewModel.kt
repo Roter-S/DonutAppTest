@@ -15,12 +15,9 @@ class MainScreenViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
-    val username: StateFlow<String?> =
-        sessionManager.username.stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            null
-        )
+    val username: StateFlow<String?> = sessionManager.username.stateIn(
+        viewModelScope, SharingStarted.Eagerly, null
+    )
 
     val isLoggedIn: StateFlow<Boolean?> =
         sessionManager.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)

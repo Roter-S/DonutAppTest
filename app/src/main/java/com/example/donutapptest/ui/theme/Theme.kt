@@ -16,32 +16,32 @@ private val ExpressiveLightColorScheme = lightColorScheme(
     onPrimary = ExpressiveOnPrimary,
     primaryContainer = ExpressivePrimaryContainer,
     onPrimaryContainer = ExpressiveOnPrimaryContainer,
-    
+
     secondary = ExpressiveSecondary,
     onSecondary = ExpressiveOnSecondary,
     secondaryContainer = ExpressiveSecondaryContainer,
     onSecondaryContainer = ExpressiveOnSecondaryContainer,
-    
+
     tertiary = ExpressiveTertiary,
     onTertiary = ExpressiveOnTertiary,
     tertiaryContainer = ExpressiveTertiaryContainer,
     onTertiaryContainer = ExpressiveOnTertiaryContainer,
-    
+
     surface = ExpressiveSurface,
     onSurface = ExpressiveOnSurface,
     surfaceVariant = ExpressiveSurfaceVariant,
     onSurfaceVariant = ExpressiveOnSurfaceVariant,
     outline = ExpressiveOutline,
     outlineVariant = ExpressiveOutlineVariant,
-    
+
     background = ExpressiveBackground,
     onBackground = ExpressiveOnBackground,
-    
+
     error = ExpressiveError,
     onError = ExpressiveOnError,
     errorContainer = ExpressiveErrorContainer,
     onErrorContainer = ExpressiveOnErrorContainer,
-    
+
     inversePrimary = ExpressiveInversePrimary,
     inverseSurface = ExpressiveInverseSurface,
     inverseOnSurface = ExpressiveInverseOnSurface
@@ -53,32 +53,32 @@ private val ExpressiveDarkColorScheme = darkColorScheme(
     onPrimary = ExpressiveDarkOnPrimary,
     primaryContainer = ExpressiveDarkPrimaryContainer,
     onPrimaryContainer = ExpressiveDarkOnPrimaryContainer,
-    
+
     secondary = ExpressiveDarkSecondary,
     onSecondary = ExpressiveDarkOnSecondary,
     secondaryContainer = ExpressiveDarkSecondaryContainer,
     onSecondaryContainer = ExpressiveDarkOnSecondaryContainer,
-    
+
     tertiary = ExpressiveDarkTertiary,
     onTertiary = ExpressiveDarkOnTertiary,
     tertiaryContainer = ExpressiveDarkTertiaryContainer,
     onTertiaryContainer = ExpressiveDarkOnTertiaryContainer,
-    
+
     surface = ExpressiveDarkSurface,
     onSurface = ExpressiveDarkOnSurface,
     surfaceVariant = ExpressiveDarkSurfaceVariant,
     onSurfaceVariant = ExpressiveDarkOnSurfaceVariant,
     outline = ExpressiveDarkOutline,
     outlineVariant = ExpressiveDarkOutlineVariant,
-    
+
     background = ExpressiveDarkBackground,
     onBackground = ExpressiveDarkOnBackground,
-    
+
     error = ExpressiveDarkError,
     onError = ExpressiveDarkOnError,
     errorContainer = ExpressiveDarkErrorContainer,
     onErrorContainer = ExpressiveDarkOnErrorContainer,
-    
+
     inversePrimary = ExpressiveInversePrimary,
     inverseSurface = ExpressiveInverseSurface,
     inverseOnSurface = ExpressiveInverseOnSurface
@@ -96,13 +96,12 @@ fun DonutAppTestTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> ExpressiveDarkColorScheme
         else -> ExpressiveLightColorScheme
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+        colorScheme = colorScheme, typography = Typography, content = content
     )
 }

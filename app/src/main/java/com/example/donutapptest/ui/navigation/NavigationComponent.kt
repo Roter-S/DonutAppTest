@@ -64,8 +64,7 @@ fun NavigationComponent(
                         popUpTo(0) { inclusive = true }
                         launchSingleTop = true
                     }
-                }
-            )
+                })
         }
     }
 }
