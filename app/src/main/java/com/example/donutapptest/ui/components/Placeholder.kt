@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun PlaceholderScreen(text: String, modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         Text(text)
     }

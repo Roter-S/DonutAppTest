@@ -18,21 +18,18 @@ import com.example.donutapptest.utils.enums.Screens
 
 @Composable
 fun BottomBar(
-    currentRoute: String,
-    onNavigate: (String) -> Unit
+    currentRoute: String, onNavigate: (String) -> Unit
 ) {
     val items = listOf(
         BottomNavItem(
             route = Screens.HOME.route,
             title = stringResource(R.string.bottom_nav_home),
             icon = Icons.Default.Home
-        ),
-        BottomNavItem(
+        ), BottomNavItem(
             route = Screens.FAVORITES.route,
             title = stringResource(R.string.bottom_nav_favorites),
             icon = Icons.Default.Favorite
-        ),
-        BottomNavItem(
+        ), BottomNavItem(
             route = Screens.CART.route,
             title = stringResource(R.string.bottom_nav_cart),
             icon = Icons.Default.ShoppingCart
@@ -40,23 +37,22 @@ fun BottomBar(
     )
 
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 8.dp
+        containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 8.dp
     ) {
         items.forEach { item ->
             NavigationBarItem(
-                icon = { 
+                icon = {
                     Icon(
-                        imageVector = item.icon, 
+                        imageVector = item.icon,
                         contentDescription = item.title,
                         tint = if (currentRoute == item.route) {
                             MaterialTheme.colorScheme.onPrimaryContainer
                         } else {
                             MaterialTheme.colorScheme.onSurfaceVariant
                         }
-                    ) 
+                    )
                 },
-                label = { 
+                label = {
                     Text(
                         text = item.title,
                         style = MaterialTheme.typography.labelMedium,
@@ -65,7 +61,7 @@ fun BottomBar(
                         } else {
                             MaterialTheme.colorScheme.onSurfaceVariant
                         }
-                    ) 
+                    )
                 },
                 selected = currentRoute == item.route,
                 onClick = { onNavigate(item.route) },
@@ -82,7 +78,5 @@ fun BottomBar(
 }
 
 private data class BottomNavItem(
-    val route: String,
-    val title: String,
-    val icon: androidx.compose.ui.graphics.vector.ImageVector
+    val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector
 ) 

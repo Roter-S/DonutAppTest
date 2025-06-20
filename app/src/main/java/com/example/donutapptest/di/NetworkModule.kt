@@ -16,7 +16,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl("https://api.example.com/")
+        return Retrofit.Builder().baseUrl("https://ae68bb0f-f6b4-4247-9812-f19aa09dfe5b.mock.pstmn.io/")
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
