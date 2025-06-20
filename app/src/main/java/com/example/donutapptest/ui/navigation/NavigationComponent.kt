@@ -17,9 +17,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.donutapptest.main.MainViewModel
-import com.example.donutapptest.ui.views.home.HomeScreen
 import com.example.donutapptest.ui.views.login.LoginScreen
 import com.example.donutapptest.ui.views.login.LoginViewModel
+import com.example.donutapptest.ui.views.main.MainScreen
 import com.example.donutapptest.ui.views.register.RegisterScreen
 import com.example.donutapptest.ui.views.register.RegisterViewModel
 import com.example.donutapptest.utils.enums.Screens
@@ -58,7 +58,14 @@ fun NavigationComponent(
             RegisterScreen(navController = navController, registerViewModel = registerViewModel)
         }
         composable(Screens.HOME.route) {
-            HomeScreen(navController = navController)
+            MainScreen(
+                onLogout = {
+                    navController.navigate(Screens.LOGIN.route) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }

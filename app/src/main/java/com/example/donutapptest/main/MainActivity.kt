@@ -23,7 +23,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DonutAppTestTheme(dynamicColor = false) {
+            DonutAppTestTheme(
+                dynamicColor = true
+            ) {
                 val navController = rememberNavController()
                 Scaffold(
                     modifier = Modifier
@@ -32,7 +34,8 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     ScaffoldNotificationObserver()
                     NavigationComponent(
-                        navController = navController, modifier = Modifier.padding(innerPadding)
+                        navController = navController, 
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }

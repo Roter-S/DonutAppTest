@@ -1,4 +1,4 @@
-package com.example.donutapptest.ui.views.home
+package com.example.donutapptest.ui.views.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class MainScreenViewModel @Inject constructor(
     private val userRepository: UserRepository, private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _user = MutableStateFlow<User?>(null)
@@ -35,4 +35,4 @@ class HomeViewModel @Inject constructor(
             onLoggedOut()
         }
     }
-}
+} 

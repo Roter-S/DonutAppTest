@@ -27,14 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.donutapptest.ui.theme.AlertError
-import com.example.donutapptest.ui.theme.AlertInfo
-import com.example.donutapptest.ui.theme.AlertSuccess
-import com.example.donutapptest.ui.theme.AlertWarning
-import com.example.donutapptest.ui.theme.OnAlertError
-import com.example.donutapptest.ui.theme.OnAlertInfo
-import com.example.donutapptest.ui.theme.OnAlertSuccess
-import com.example.donutapptest.ui.theme.OnAlertWarning
+import com.example.donutapptest.ui.theme.ExpressiveAlertError
+import com.example.donutapptest.ui.theme.ExpressiveAlertInfo
+import com.example.donutapptest.ui.theme.ExpressiveAlertSuccess
+import com.example.donutapptest.ui.theme.ExpressiveAlertWarning
+import com.example.donutapptest.ui.theme.ExpressiveOnAlertError
+import com.example.donutapptest.ui.theme.ExpressiveOnAlertInfo
+import com.example.donutapptest.ui.theme.ExpressiveOnAlertSuccess
+import com.example.donutapptest.ui.theme.ExpressiveOnAlertWarning
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -104,18 +104,18 @@ fun CustomSnackbarContent(
 
 @Composable
 fun getColorForType(type: String): Color = when (type) {
-    "INFO" -> AlertInfo
-    "SUCCESS" -> AlertSuccess
-    "WARNING" -> AlertWarning
-    "ERROR" -> AlertError
+    "INFO" -> ExpressiveAlertInfo
+    "SUCCESS" -> ExpressiveAlertSuccess
+    "WARNING" -> ExpressiveAlertWarning
+    "ERROR" -> ExpressiveAlertError
     else -> MaterialTheme.colorScheme.surface
 }
 
 @Composable
 fun getColorOnType(type: String): Color = when (type) {
-    "INFO" -> OnAlertInfo
-    "SUCCESS" -> OnAlertSuccess
-    "WARNING" -> OnAlertWarning
-    "ERROR" -> OnAlertError
+    "INFO" -> ExpressiveOnAlertInfo
+    "SUCCESS" -> ExpressiveOnAlertSuccess
+    "WARNING" -> ExpressiveOnAlertWarning
+    "ERROR" -> ExpressiveOnAlertError
     else -> MaterialTheme.colorScheme.onSurface
 }

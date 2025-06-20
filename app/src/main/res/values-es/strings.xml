@@ -22,6 +22,15 @@
     <string name="register_login_here">Inicia sesión aquí</string>
     <string name="register_button">Registrar</string>
 
+    <!-- Bottom Navigation -->
+    <string name="bottom_nav_home">Inicio</string>
+    <string name="bottom_nav_favorites">Favoritos</string>
+    <string name="bottom_nav_cart">Carrito</string>
+
+    <!-- Navigation -->
+    <string name="nav_logout">Cerrar sesión</string>
+    <string name="nav_back">Volver</string>
+
     <!-- commons -->
     <string name="common_loading">Cargando…</string>
 
