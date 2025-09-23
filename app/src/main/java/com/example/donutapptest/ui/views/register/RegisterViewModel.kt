@@ -134,6 +134,7 @@ class RegisterViewModel @Inject constructor(
                     password = state.password
                 )
                 sessionManager.setLoggedIn(true)
+                sessionManager.setUsername(state.email)
                 _uiState.value = state.copy(isLoading = false, isRegisterSuccessful = true)
                 onResult(true)
             }

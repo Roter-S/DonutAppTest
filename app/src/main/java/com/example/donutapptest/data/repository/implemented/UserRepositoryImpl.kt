@@ -1,6 +1,7 @@
-package com.example.donutapptest.data.repository
+package com.example.donutapptest.data.repository.implemented
 
 import com.example.donutapptest.data.local.UserDao
+import com.example.donutapptest.data.repository.UserRepository
 import com.example.donutapptest.domain.model.User
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter

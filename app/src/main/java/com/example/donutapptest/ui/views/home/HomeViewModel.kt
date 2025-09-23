@@ -20,35 +20,19 @@ class HomeViewModel @Inject constructor(
         private set
     var isLoading by mutableStateOf(false)
         private set
-    var page by mutableStateOf(1)
-        private set
-    val pageSize = 5
-    var endReached by mutableStateOf(false)
-        private set
 
     init {
-        loadNextPage()
+        loadDonuts()
     }
 
-    fun loadNextPage() {
-        if (isLoading || endReached) return
+    fun loadDonuts() {
+        if (isLoading) return
         isLoading = true
         viewModelScope.launch {
-            val newDonuts = donutRepository.getDonuts(page, pageSize)
-            if (newDonuts.isNotEmpty()) {
-                donuts.addAll(newDonuts)
-                page++
-            } else {
-                endReached = true
-            }
+            val allDonuts = donutRepository.getDonuts()
+            donuts.clear()
+            donuts.addAll(allDonuts)
             isLoading = false
         }
     }
-
-    fun resetList() {
-        donuts.clear()
-        page = 1
-        endReached = false
-        loadNextPage()
-    }
-} 
+}
