@@ -1,6 +1,6 @@
 package com.example.donutapptest.data.repository
 
-import com.example.donutapptest.domain.model.User
+import com.example.donutapptest.data.model.User
 
 class FakeUserRepository : UserRepository {
     private val users = mutableListOf<User>()

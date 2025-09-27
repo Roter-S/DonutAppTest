@@ -9,6 +9,7 @@ import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.utils.NotificationManager
 import com.example.donutapptest.utils.enums.Alerts
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -63,7 +64,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun validateLogin(onResult: (Boolean) -> Unit, context: Context) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = _uiState.value.copy(isLoading = true)
             delay(1000)
             val isUserValid =

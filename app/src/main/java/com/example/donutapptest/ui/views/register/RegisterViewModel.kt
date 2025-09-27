@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.data.repository.UserRepository
 import com.example.donutapptest.data.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -119,7 +120,7 @@ class RegisterViewModel @Inject constructor(
     fun validateRegister(onResult: (Boolean) -> Unit, context: Context) {
         val state = _uiState.value
         _uiState.value = state.copy(isLoading = true)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val userExists = userRepository.isUserRegistered(state.email)
             if (userExists) {
                 _uiState.value = state.copy(

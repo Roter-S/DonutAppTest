@@ -2,8 +2,8 @@ package com.example.donutapptest.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.donutapptest.data.local.AppDatabase
-import com.example.donutapptest.data.local.UserDao
+import com.example.donutapptest.data.room.AppDatabase
+import com.example.donutapptest.data.room.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

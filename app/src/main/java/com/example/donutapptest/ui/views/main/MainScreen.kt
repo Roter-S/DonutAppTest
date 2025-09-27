@@ -24,13 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.donutapptest.R
 import com.example.donutapptest.ui.components.BottomBar
-import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import com.example.donutapptest.ui.views.cart.CartScreen
 import com.example.donutapptest.ui.views.favorites.FavoritesScreen
 import com.example.donutapptest.ui.views.home.HomeScreen
@@ -38,20 +37,17 @@ import com.example.donutapptest.utils.enums.Screens
 
 @Composable
 fun MainScreen(
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
-    onLogout: (() -> Unit)? = null
+    navController: NavHostController,
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
 ) {
     var currentRoute by remember { mutableStateOf(Screens.HOME.route) }
     val username by mainScreenViewModel.username.collectAsState()
-    val logoutHandler: () -> Unit = {
-        onLogout?.let { mainScreenViewModel.logout(it) }
-    }
 
     MainScreenContent(
         username = username ?: "Usuario",
         currentRoute = currentRoute,
         onNavigate = { newRoute -> currentRoute = newRoute },
-        onLogout = logoutHandler
+        navController = navController
     )
 }
 
@@ -61,7 +57,7 @@ fun MainScreenContent(
     username: String,
     currentRoute: String,
     onNavigate: (String) -> Unit,
-    onLogout: () -> Unit
+    navController: NavHostController
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
 
@@ -104,7 +100,10 @@ fun MainScreenContent(
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.nav_logout)) },
                                 onClick = {
-                                    onLogout()
+                                    navController.navigate(Screens.LOGIN.route) {
+                                        popUpTo(Screens.HOME.route) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
                                     menuExpanded = false
                                 },
                                 leadingIcon = {
@@ -141,16 +140,3 @@ fun MainScreenContent(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    DonutAppTestTheme {
-        MainScreenContent(
-            username = "Preview User",
-            currentRoute = Screens.HOME.route,
-            onNavigate = {},
-            onLogout = {}
-        )
-    }
-} 

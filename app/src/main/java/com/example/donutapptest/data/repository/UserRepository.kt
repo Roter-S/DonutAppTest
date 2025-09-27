@@ -1,6 +1,6 @@
 package com.example.donutapptest.data.repository
 
-import com.example.donutapptest.domain.model.User
+import com.example.donutapptest.data.model.User
 
 interface UserRepository {
     suspend fun insertUser(user: User): Long

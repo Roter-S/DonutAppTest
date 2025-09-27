@@ -48,11 +48,9 @@ android {
 
 dependencies {
     // hilt
-    implementation(libs.androidx.hilt.navigation.fragment)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
-    ksp(libs.hilt.compiler)
 
     // room
     implementation(libs.androidx.room.runtime)

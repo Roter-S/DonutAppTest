@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +33,8 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     ScaffoldNotificationObserver()
                     NavigationComponent(
-                        navController = navController, modifier = Modifier.padding(innerPadding)
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }

@@ -1,9 +1,9 @@
-package com.example.donutapptest.data.local
+package com.example.donutapptest.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.donutapptest.domain.model.User
+import com.example.donutapptest.data.model.User
 
 @Dao
 interface UserDao {

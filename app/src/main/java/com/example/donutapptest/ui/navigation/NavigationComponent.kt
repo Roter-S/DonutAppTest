@@ -18,10 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.donutapptest.main.MainViewModel
 import com.example.donutapptest.ui.views.login.LoginScreen
-import com.example.donutapptest.ui.views.login.LoginViewModel
 import com.example.donutapptest.ui.views.main.MainScreen
 import com.example.donutapptest.ui.views.register.RegisterScreen
-import com.example.donutapptest.ui.views.register.RegisterViewModel
 import com.example.donutapptest.utils.enums.Screens
 
 @Composable
@@ -40,31 +38,15 @@ fun NavigationComponent(
     }
 
     if (initialRoute == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
     }
 
     NavHost(navController = navController, startDestination = initialRoute ?: Screens.LOGIN.route) {
-        composable(Screens.LOGIN.route) {
-            val loginViewModel: LoginViewModel = hiltViewModel()
-            LoginScreen(
-                navController = navController, loginViewModel = loginViewModel
-            )
-        }
-        composable(Screens.REGISTER.route) {
-            val registerViewModel: RegisterViewModel = hiltViewModel()
-            RegisterScreen(navController = navController, registerViewModel = registerViewModel)
-        }
-        composable(Screens.HOME.route) {
-            MainScreen(
-                onLogout = {
-                    navController.navigate(Screens.LOGIN.route) {
-                        popUpTo(0) { inclusive = true }
-                        launchSingleTop = true
-                    }
-                })
-        }
+        composable(Screens.LOGIN.route) { LoginScreen(navController = navController) }
+        composable(Screens.REGISTER.route) { RegisterScreen(navController = navController) }
+        composable(Screens.HOME.route) { MainScreen(navController = navController) }
     }
 }

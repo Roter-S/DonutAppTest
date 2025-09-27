@@ -1,9 +1,9 @@
 package com.example.donutapptest.ui.preview
 
-import com.example.donutapptest.domain.model.Batter
-import com.example.donutapptest.domain.model.Batters
-import com.example.donutapptest.domain.model.Donut
-import com.example.donutapptest.domain.model.Topping
+import com.example.donutapptest.data.model.Batter
+import com.example.donutapptest.data.model.Batters
+import com.example.donutapptest.data.model.Donut
+import com.example.donutapptest.data.model.Topping
 
 object SampleData {
 

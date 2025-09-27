@@ -10,11 +10,11 @@ import com.example.donutapptest.ui.components.DonutList
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel()
+    modifier: Modifier = Modifier, homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     BackHandler {
         (context as? Activity)?.finishAffinity()
     }
-    DonutList(modifier = modifier, viewModel = viewModel)
+    DonutList(modifier = modifier, viewModel = homeViewModel)
 }

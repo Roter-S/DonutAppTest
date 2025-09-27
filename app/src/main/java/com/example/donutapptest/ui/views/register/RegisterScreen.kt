@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.donutapptest.R
@@ -26,7 +27,7 @@ import com.example.donutapptest.ui.components.OutlinedRoundedField
 
 @Composable
 fun RegisterScreen(
-    navController: NavHostController, registerViewModel: RegisterViewModel
+    navController: NavHostController, registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
     val uiState by registerViewModel.uiState.collectAsState()
     val context = LocalContext.current

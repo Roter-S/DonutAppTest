@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.example.donutapptest.domain.model.Donut
+import com.example.donutapptest.data.model.Donut
 import com.example.donutapptest.ui.preview.SampleData
 import java.util.Locale
 

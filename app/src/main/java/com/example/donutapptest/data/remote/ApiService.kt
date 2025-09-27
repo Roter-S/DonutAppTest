@@ -1,6 +1,6 @@
 package com.example.donutapptest.data.remote
 
-import com.example.donutapptest.domain.model.Donut
+import com.example.donutapptest.data.model.Donut
 import retrofit2.Response
 import retrofit2.http.GET
 
