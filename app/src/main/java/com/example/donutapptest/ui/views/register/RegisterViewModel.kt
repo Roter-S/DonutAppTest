@@ -3,6 +3,7 @@ package com.example.donutapptest.ui.views.register
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.donutapptest.data.model.RegisterUiState
 import com.example.donutapptest.data.repository.UserRepository
 import com.example.donutapptest.data.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,29 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
 import javax.inject.Inject
-
-data class RegisterUiState(
-    val firstName: String = "",
-    val firstNameError: String? = null,
-    val firstNameTouched: Boolean = false,
-    val lastName: String = "",
-    val lastNameError: String? = null,
-    val lastNameTouched: Boolean = false,
-    val email: String = "",
-    val emailError: String? = null,
-    val emailTouched: Boolean = false,
-    val password: String = "",
-    val passwordError: String? = null,
-    val passwordTouched: Boolean = false,
-    val confirmPassword: String = "",
-    val confirmPasswordError: String? = null,
-    val confirmPasswordTouched: Boolean = false,
-    val isFormValid: Boolean = false,
-    val isLoading: Boolean = false,
-    val isRegisterSuccessful: Boolean = false
-)
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -122,22 +103,29 @@ class RegisterViewModel @Inject constructor(
         _uiState.value = state.copy(isLoading = true)
         viewModelScope.launch(Dispatchers.IO) {
             val userExists = userRepository.isUserRegistered(state.email)
-            if (userExists) {
-                _uiState.value = state.copy(
-                    isLoading = false, emailError = "El usuario ya está registrado"
-                )
-                onResult(false)
-            } else {
-                userRepository.registerUser(
-                    firstName = state.firstName,
-                    lastName = state.lastName,
-                    email = state.email,
-                    password = state.password
-                )
-                sessionManager.setLoggedIn(true)
-                sessionManager.setUsername(state.email)
-                _uiState.value = state.copy(isLoading = false, isRegisterSuccessful = true)
-                onResult(true)
+            withContext(Dispatchers.Main) {
+                if (userExists) {
+                    _uiState.value = state.copy(
+                        isLoading = false, emailError = "El usuario ya está registrado"
+                    )
+                    onResult(false)
+                } else {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        userRepository.registerUser(
+                            firstName = state.firstName,
+                            lastName = state.lastName,
+                            email = state.email,
+                            password = state.password
+                        )
+                        sessionManager.setLoggedIn(true)
+                        sessionManager.setUsername(state.email)
+                        withContext(Dispatchers.Main) {
+                            _uiState.value =
+                                state.copy(isLoading = false, isRegisterSuccessful = true)
+                            onResult(true)
+                        }
+                    }
+                }
             }
         }
     }

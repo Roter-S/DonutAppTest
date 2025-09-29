@@ -101,4 +101,7 @@ dependencies {
     // Coil for image loading
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    //Lottie for animations
+    implementation(libs.lottie.compose)
 }

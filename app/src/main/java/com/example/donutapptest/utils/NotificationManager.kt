@@ -1,5 +1,6 @@
 package com.example.donutapptest.utils
 
+import com.example.donutapptest.data.model.NotificationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,5 +16,3 @@ object NotificationManager {
         _notificationState.value = null
     }
 }
-
-data class NotificationState(val message: String, val type: String)

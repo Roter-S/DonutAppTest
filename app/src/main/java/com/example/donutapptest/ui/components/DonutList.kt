@@ -55,7 +55,7 @@ fun DonutListContent(
 
     Box(modifier = modifier.fillMaxSize()) {
         if (donuts.isEmpty() && isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            LoaderScreen()
         } else {
             LazyColumn(
                 state = listState,
@@ -93,7 +93,7 @@ fun DonutListContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DonutListPreview() {
     DonutListContent(

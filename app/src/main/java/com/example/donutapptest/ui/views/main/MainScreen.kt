@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,9 +58,21 @@ fun MainScreenContent(
     username: String,
     currentRoute: String,
     onNavigate: (String) -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
+    val isLoggedOut by mainScreenViewModel.isLoggedOut.collectAsState()
+
+    LaunchedEffect(isLoggedOut) {
+        if (isLoggedOut) {
+            navController.navigate(Screens.LOGIN.route) {
+                popUpTo(Screens.HOME.route) { inclusive = true }
+                launchSingleTop = true
+            }
+            menuExpanded = false
+        }
+    }
 
     val title = when (currentRoute) {
         Screens.HOME.route -> stringResource(R.string.bottom_nav_home)
@@ -100,11 +113,7 @@ fun MainScreenContent(
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.nav_logout)) },
                                 onClick = {
-                                    navController.navigate(Screens.LOGIN.route) {
-                                        popUpTo(Screens.HOME.route) { inclusive = true }
-                                        launchSingleTop = true
-                                    }
-                                    menuExpanded = false
+                                    mainScreenViewModel.logout()
                                 },
                                 leadingIcon = {
                                     Icon(

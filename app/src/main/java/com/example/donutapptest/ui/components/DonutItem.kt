@@ -162,7 +162,7 @@ fun DonutItem(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun DonutItemPreview() {
     DonutItem(donut = SampleData.sampleDonut)

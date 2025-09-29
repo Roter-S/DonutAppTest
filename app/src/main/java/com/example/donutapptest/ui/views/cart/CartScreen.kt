@@ -11,7 +11,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
     PlaceholderScreen(text = "Pantalla del Carrito", modifier = modifier)
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CartScreenPreview() {
     DonutAppTestTheme {

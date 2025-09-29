@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.donutapptest.R
+import com.example.donutapptest.data.model.LoginUiState
 import com.example.donutapptest.data.repository.UserRepository
 import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.utils.NotificationManager
@@ -14,19 +15,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-data class LoginUiState(
-    val username: String = "",
-    val usernameError: String? = null,
-    val usernameTouched: Boolean = false,
-    val password: String = "",
-    val passwordError: String? = null,
-    val passwordTouched: Boolean = false,
-    val isFormValid: Boolean = false,
-    val isLoading: Boolean = false,
-    val isLoginSuccessful: Boolean = false
-)
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -64,11 +55,14 @@ class LoginViewModel @Inject constructor(
     }
 
     fun validateLogin(onResult: (Boolean) -> Unit, context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             delay(1000)
-            val isUserValid =
+
+            val isUserValid = withContext(Dispatchers.IO) {
                 userRepository.checkUserPassword(_uiState.value.username, _uiState.value.password)
+            }
+
             if (isUserValid) {
                 sessionManager.setLoggedIn(true)
                 sessionManager.setUsername(_uiState.value.username)

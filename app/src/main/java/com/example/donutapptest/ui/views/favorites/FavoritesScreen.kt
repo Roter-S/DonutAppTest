@@ -11,7 +11,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     PlaceholderScreen(text = "Pantalla de Favoritos", modifier = modifier)
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun FavoritesScreenPreview() {
     DonutAppTestTheme {

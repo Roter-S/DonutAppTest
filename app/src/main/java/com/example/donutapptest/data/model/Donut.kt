@@ -7,8 +7,7 @@ data class Donut(
     val type: String,
     val name: String,
     val ppu: Double,
-    @SerializedName("image_url")
-    val imageUrl: String,
+    @SerializedName("image_url") val imageUrl: String,
     val batters: Batters,
     val topping: List<Topping>
 )
@@ -18,11 +17,9 @@ data class Batters(
 )
 
 data class Batter(
-    val id: String,
-    val type: String
+    val id: String, val type: String
 )
 
 data class Topping(
-    val id: String,
-    val type: String
+    val id: String, val type: String
 )

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.donutapptest.data.repository.DonutRepository
 import com.example.donutapptest.data.model.Donut
+import com.example.donutapptest.data.repository.DonutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     var donuts = mutableStateListOf<Donut>()
         private set
-    var isLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(true)
         private set
 
     init {
@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadDonuts() {
-        if (isLoading) return
+        if (isLoading && donuts.isNotEmpty()) return
         isLoading = true
         viewModelScope.launch {
             val allDonuts = donutRepository.getDonuts()

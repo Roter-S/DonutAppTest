@@ -1,8 +1,5 @@
 package com.example.donutapptest.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -10,13 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.donutapptest.main.MainViewModel
+import com.example.donutapptest.ui.components.LoaderScreen
 import com.example.donutapptest.ui.views.login.LoginScreen
 import com.example.donutapptest.ui.views.main.MainScreen
 import com.example.donutapptest.ui.views.register.RegisterScreen
@@ -38,9 +35,7 @@ fun NavigationComponent(
     }
 
     if (initialRoute == null) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+        LoaderScreen(modifier = modifier)
         return
     }
 
