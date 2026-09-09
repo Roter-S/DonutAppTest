@@ -1,21 +1,33 @@
 package com.example.donutapptest.ui.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
-import com.example.donutapptest.utils.NotificationManager
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.example.donutapptest.ui.common.AppNotification
+import com.example.donutapptest.ui.common.AppNotificationManager
 
 @Composable
-fun ScaffoldNotificationObserver() {
-    val notificationState = NotificationManager.notificationState.collectAsState().value
-    val scope = rememberCoroutineScope()
+fun ScaffoldNotificationObserver(
+    notificationManager: AppNotificationManager
+) {
+    val context = LocalContext.current
+    var currentNotification by remember { mutableStateOf<AppNotification?>(null) }
 
-    notificationState?.let { state ->
+    LaunchedEffect(notificationManager) {
+        notificationManager.notifications.collect { notification ->
+            currentNotification = notification
+        }
+    }
+
+    currentNotification?.let { notif ->
         ScaffoldNotification(
-            scope = scope,
-            message = state.message,
-            onDismiss = { NotificationManager.clearNotification() },
-            type = state.type
+            message = notif.message.asString(context),
+            type = notif.type,
+            onDismiss = { currentNotification = null }
         )
     }
 }

@@ -2,10 +2,13 @@ package com.example.donutapptest.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,27 +30,31 @@ fun LoadingButton(
     Button(
         onClick = onClick,
         enabled = !isLoading && isEnabled,
+        shape = RoundedCornerShape(24.dp),
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 32.dp)
+            .height(52.dp)
     ) {
         if (isLoading) {
             Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 CircularProgressIndicator(
-                    strokeWidth = 2.dp, modifier = Modifier
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
                         .padding(end = 8.dp)
                         .size(20.dp)
                 )
                 Text(
                     text = stringResource(id = R.string.common_loading),
-                    fontSize = 16.sp,
+                    fontSize = 16.sp
                 )
             }
         } else {
             Text(
-                text = text, fontSize = 16.sp, modifier = Modifier.padding(8.dp)
+                text = text,
+                fontSize = 16.sp
             )
         }
     }
@@ -58,7 +65,7 @@ fun LoadingButton(
 fun LoadingButtonPreview() {
     LoadingButton(
         text = "Submit",
-        isLoading = true,
+        isLoading = false,
         isEnabled = true,
         onClick = {}
     )

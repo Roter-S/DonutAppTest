@@ -1,139 +1,175 @@
 package com.example.donutapptest.ui.views.register
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.donutapptest.data.model.RegisterUiState
-import com.example.donutapptest.data.repository.UserRepository
-import com.example.donutapptest.data.session.SessionManager
+import com.example.donutapptest.R
+import com.example.donutapptest.core.common.Result
+import com.example.donutapptest.core.common.UiText
+import com.example.donutapptest.domain.usecase.auth.RegisterUseCase
+import com.example.donutapptest.domain.usecase.auth.ValidateEmailUseCase
+import com.example.donutapptest.domain.usecase.auth.ValidatePasswordUseCase
+import com.example.donutapptest.ui.common.AppNotificationManager
+import com.example.donutapptest.ui.views.register.model.RegisterUiEvent
+import com.example.donutapptest.ui.views.register.model.RegisterUiState
+import com.example.donutapptest.utils.enums.Alerts
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val userRepository: UserRepository, private val sessionManager: SessionManager
+    private val registerUseCase: RegisterUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val notificationManager: AppNotificationManager
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(RegisterUiState())
-    val uiState: StateFlow<RegisterUiState> = _uiState
+    val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
+
+    private val _uiEvent = Channel<RegisterUiEvent>(Channel.BUFFERED)
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onFirstNameChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(
-            firstName = newValue, firstNameTouched = true, firstNameError = null
-        )
+        _uiState.update {
+            it.copy(
+                firstName = newValue,
+                firstNameTouched = true,
+                firstNameError = null
+            )
+        }
         validateForm()
     }
 
     fun onLastNameChange(newValue: String) {
-        _uiState.value =
-            _uiState.value.copy(lastName = newValue, lastNameTouched = true, lastNameError = null)
+        _uiState.update {
+            it.copy(
+                lastName = newValue,
+                lastNameTouched = true,
+                lastNameError = null
+            )
+        }
         validateForm()
     }
 
-    fun onEmailChange(newValue: String, context: Context) {
-        _uiState.value =
-            _uiState.value.copy(email = newValue, emailTouched = true, emailError = null)
+    fun onEmailChange(newValue: String) {
+        _uiState.update {
+            it.copy(
+                email = newValue,
+                emailTouched = true,
+                emailError = null
+            )
+        }
         validateForm()
     }
 
     fun onPasswordChange(newValue: String) {
-        _uiState.value =
-            _uiState.value.copy(password = newValue, passwordTouched = true, passwordError = null)
+        _uiState.update {
+            it.copy(
+                password = newValue,
+                passwordTouched = true,
+                passwordError = null
+            )
+        }
         validateForm()
     }
 
     fun onConfirmPasswordChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(
-            confirmPassword = newValue, confirmPasswordTouched = true, confirmPasswordError = null
-        )
+        _uiState.update {
+            it.copy(
+                confirmPassword = newValue,
+                confirmPasswordTouched = true,
+                confirmPasswordError = null
+            )
+        }
         validateForm()
     }
 
     private fun validateForm() {
         val state = _uiState.value
         var isValid = true
-        var firstNameError: String? = null
-        var lastNameError: String? = null
-        var emailError: String? = null
-        var passwordError: String? = null
-        var confirmPasswordError: String? = null
 
-        if (!state.firstNameTouched) firstNameError = null
-        else if (state.firstName.isBlank()) {
-            firstNameError = "El nombre es obligatorio"
+        val firstNameError = if (state.firstNameTouched && state.firstName.isBlank()) {
             isValid = false
-        }
-        if (!state.lastNameTouched) lastNameError = null
-        else if (state.lastName.isBlank()) {
-            lastNameError = "El apellido es obligatorio"
+            UiText.StringResource(R.string.error_firstname_required)
+        } else null
+
+        val lastNameError = if (state.lastNameTouched && state.lastName.isBlank()) {
             isValid = false
-        }
-        if (!state.emailTouched) emailError = null
-        else if (!isValidEmail(state.email)) {
-            emailError = "Correo electrónico inválido"
+            UiText.StringResource(R.string.error_lastname_required)
+        } else null
+
+        val emailValidation = validateEmailUseCase(state.email)
+        val emailError = if (state.emailTouched && !emailValidation.successful) {
             isValid = false
-        }
-        if (!state.passwordTouched) passwordError = null
-        else if (state.password.length < 6) {
-            passwordError = "La contraseña debe tener al menos 6 caracteres"
+            emailValidation.errorMessage
+        } else null
+
+        val passwordValidation = validatePasswordUseCase(state.password)
+        val passwordError = if (state.passwordTouched && !passwordValidation.successful) {
             isValid = false
-        }
-        if (!state.confirmPasswordTouched) confirmPasswordError = null
-        else if (state.password != state.confirmPassword) {
-            confirmPasswordError = "Las contraseñas no coinciden"
+            passwordValidation.errorMessage
+        } else null
+
+        val confirmPasswordError = if (state.confirmPasswordTouched && state.password != state.confirmPassword) {
             isValid = false
+            UiText.StringResource(R.string.error_passwords_not_matching)
+        } else null
+
+        val allFilled = state.firstName.isNotBlank() &&
+                state.lastName.isNotBlank() &&
+                state.email.isNotBlank() &&
+                state.password.isNotBlank() &&
+                state.confirmPassword.isNotBlank()
+
+        _uiState.update {
+            it.copy(
+                firstNameError = firstNameError,
+                lastNameError = lastNameError,
+                emailError = emailError,
+                passwordError = passwordError,
+                confirmPasswordError = confirmPasswordError,
+                isFormValid = isValid && allFilled
+            )
         }
-        _uiState.value = state.copy(
-            firstNameError = firstNameError,
-            lastNameError = lastNameError,
-            emailError = emailError,
-            passwordError = passwordError,
-            confirmPasswordError = confirmPasswordError,
-            isFormValid = isValid
-        )
     }
 
-    fun validateRegister(onResult: (Boolean) -> Unit, context: Context) {
-        val state = _uiState.value
-        _uiState.value = state.copy(isLoading = true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val userExists = userRepository.isUserRegistered(state.email)
-            withContext(Dispatchers.Main) {
-                if (userExists) {
-                    _uiState.value = state.copy(
-                        isLoading = false, emailError = "El usuario ya está registrado"
-                    )
-                    onResult(false)
-                } else {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        userRepository.registerUser(
-                            firstName = state.firstName,
-                            lastName = state.lastName,
-                            email = state.email,
-                            password = state.password
-                        )
-                        sessionManager.setLoggedIn(true)
-                        sessionManager.setUsername(state.email)
-                        withContext(Dispatchers.Main) {
-                            _uiState.value =
-                                state.copy(isLoading = false, isRegisterSuccessful = true)
-                            onResult(true)
-                        }
+    fun register() {
+        if (!_uiState.value.isFormValid || _uiState.value.isLoading) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            val currentState = _uiState.value
+            val result = registerUseCase(
+                firstName = currentState.firstName,
+                lastName = currentState.lastName,
+                email = currentState.email,
+                password = currentState.password
+            )
+
+            when (result) {
+                is Result.Success -> {
+                    _uiState.update { it.copy(isLoading = false) }
+                    _uiEvent.send(RegisterUiEvent.NavigateToHome)
+                }
+                is Result.Error -> {
+                    _uiState.update { it.copy(isLoading = false) }
+                    result.message?.let { msg ->
+                        _uiState.update { it.copy(emailError = msg) }
+                        notificationManager.showNotification(msg, Alerts.ERROR)
                     }
+                }
+                is Result.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
             }
         }
-    }
-
-    private fun isValidEmail(email: String): Boolean {
-        val emailPattern = Pattern.compile(
-            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
-        )
-        return emailPattern.matcher(email).matches()
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,27 +23,28 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.donutapptest.data.model.OnboardingPage
-import com.example.donutapptest.data.source.local.OnboardingDataSource
+import com.example.donutapptest.R
 import com.example.donutapptest.ui.components.LottieAnimationComponent
+import com.example.donutapptest.ui.views.onboarding.model.OnboardingPage
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    onFinished: () -> Unit
+    onFinished: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val pages = OnboardingDataSource.getOnboardingPages()
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -53,7 +53,7 @@ fun OnboardingScreen(
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) { page ->
-            OnboardingPage(
+            OnboardingPageItem(
                 page = pages[page],
                 modifier = Modifier.fillMaxSize()
             )
@@ -67,13 +67,13 @@ fun OnboardingScreen(
                 val color = if (pagerState.currentPage == index) {
                     MaterialTheme.colorScheme.primary
                 } else {
-                    Color.Gray
+                    MaterialTheme.colorScheme.outlineVariant
                 }
                 Box(
                     modifier = Modifier
-                        .padding(5.dp)
-                        .height(10.dp)
-                        .width(25.dp)
+                        .padding(4.dp)
+                        .height(8.dp)
+                        .width(if (pagerState.currentPage == index) 24.dp else 8.dp)
                         .background(color, CircleShape)
                 )
             }
@@ -93,7 +93,7 @@ fun OnboardingScreen(
                         }
                     }
                 ) {
-                    Text("Anterior")
+                    Text(stringResource(id = R.string.btn_previous))
                 }
             } else {
                 Spacer(modifier = Modifier.width(1.dp))
@@ -112,7 +112,13 @@ fun OnboardingScreen(
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 Text(
-                    if (pagerState.currentPage == pages.size - 1) "Empezar" else "Siguiente"
+                    text = stringResource(
+                        id = if (pagerState.currentPage == pages.size - 1) {
+                            R.string.btn_get_started
+                        } else {
+                            R.string.btn_next
+                        }
+                    )
                 )
             }
         }
@@ -120,7 +126,7 @@ fun OnboardingScreen(
 }
 
 @Composable
-private fun OnboardingPage(
+private fun OnboardingPageItem(
     page: OnboardingPage,
     modifier: Modifier = Modifier
 ) {
@@ -132,22 +138,23 @@ private fun OnboardingPage(
         LottieAnimationComponent(
             animationRes = page.lottieAnimation,
             modifier = Modifier.padding(bottom = 32.dp),
-            size = 200.dp,
+            size = 200.dp
         )
 
         Text(
-            text = page.title,
+            text = stringResource(id = page.title),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         Text(
-            text = page.description,
+            text = stringResource(id = page.description),
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 24.sp
         )
     }
@@ -158,4 +165,3 @@ private fun OnboardingPage(
 fun OnboardingScreenPreview() {
     OnboardingScreen(onFinished = {})
 }
-

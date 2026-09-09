@@ -35,25 +35,27 @@ import com.example.donutapptest.ui.theme.ExpressiveOnAlertError
 import com.example.donutapptest.ui.theme.ExpressiveOnAlertInfo
 import com.example.donutapptest.ui.theme.ExpressiveOnAlertSuccess
 import com.example.donutapptest.ui.theme.ExpressiveOnAlertWarning
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.example.donutapptest.utils.enums.Alerts
 
 @Composable
 fun ScaffoldNotification(
-    scope: CoroutineScope, message: String, onDismiss: () -> Unit, type: String = "SUCCESS"
+    message: String,
+    onDismiss: () -> Unit,
+    type: Alerts = Alerts.SUCCESS,
+    modifier: Modifier = Modifier
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = message) {
-        scope.launch {
-            snackBarHostState.showSnackbar(
-                message = message, duration = SnackbarDuration.Short
-            )
-        }
+        snackBarHostState.showSnackbar(
+            message = message,
+            duration = SnackbarDuration.Short
+        )
+        onDismiss()
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .zIndex(1f)
     ) {
@@ -62,15 +64,20 @@ fun ScaffoldNotification(
             modifier = Modifier.align(Alignment.BottomCenter),
             snackbar = {
                 CustomSnackbarContent(
-                    message = message, onDismiss = onDismiss, type = type
+                    message = message,
+                    onDismiss = onDismiss,
+                    type = type
                 )
-            })
+            }
+        )
     }
 }
 
 @Composable
 fun CustomSnackbarContent(
-    message: String, onDismiss: () -> Unit, type: String
+    message: String,
+    onDismiss: () -> Unit,
+    type: Alerts
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -103,19 +110,17 @@ fun CustomSnackbarContent(
 }
 
 @Composable
-fun getColorForType(type: String): Color = when (type) {
-    "INFO" -> ExpressiveAlertInfo
-    "SUCCESS" -> ExpressiveAlertSuccess
-    "WARNING" -> ExpressiveAlertWarning
-    "ERROR" -> ExpressiveAlertError
-    else -> MaterialTheme.colorScheme.surface
+fun getColorForType(type: Alerts): Color = when (type) {
+    Alerts.INFO -> ExpressiveAlertInfo
+    Alerts.SUCCESS -> ExpressiveAlertSuccess
+    Alerts.WARNING -> ExpressiveAlertWarning
+    Alerts.ERROR -> ExpressiveAlertError
 }
 
 @Composable
-fun getColorOnType(type: String): Color = when (type) {
-    "INFO" -> ExpressiveOnAlertInfo
-    "SUCCESS" -> ExpressiveOnAlertSuccess
-    "WARNING" -> ExpressiveOnAlertWarning
-    "ERROR" -> ExpressiveOnAlertError
-    else -> MaterialTheme.colorScheme.onSurface
+fun getColorOnType(type: Alerts): Color = when (type) {
+    Alerts.INFO -> ExpressiveOnAlertInfo
+    Alerts.SUCCESS -> ExpressiveOnAlertSuccess
+    Alerts.WARNING -> ExpressiveOnAlertWarning
+    Alerts.ERROR -> ExpressiveOnAlertError
 }

@@ -10,34 +10,36 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.example.donutapptest.ui.common.AppNotificationManager
+import com.example.donutapptest.ui.components.LoaderScreen
 import com.example.donutapptest.ui.components.ScaffoldNotificationObserver
 import com.example.donutapptest.ui.navigation.NavigationComponent
 import com.example.donutapptest.ui.theme.DonutAppTestTheme
+import com.example.donutapptest.ui.views.main.MainViewModel
 import com.example.donutapptest.ui.views.onboarding.OnboardingScreen
-import com.example.donutapptest.utils.PreferencesHelper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var preferencesHelper: PreferencesHelper
+    @Inject
+    lateinit var notificationManager: AppNotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        preferencesHelper = PreferencesHelper(this)
-
         setContent {
             DonutAppTestTheme(
-                dynamicColor = true
+                dynamicColor = false
             ) {
-                var showOnboarding by remember { mutableStateOf(!preferencesHelper.isOnboardingCompleted) }
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val isOnboardingCompleted by mainViewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
                 val navController = rememberNavController()
 
                 Scaffold(
@@ -45,19 +47,26 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) { innerPadding ->
-                    if (showOnboarding) {
-                        OnboardingScreen(
-                            onFinished = {
-                                preferencesHelper.isOnboardingCompleted = true
-                                showOnboarding = false
-                            }
-                        )
-                    } else {
-                        ScaffoldNotificationObserver()
-                        NavigationComponent(
-                            navController = navController,
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                    when (isOnboardingCompleted) {
+                        null -> {
+                            LoaderScreen(modifier = Modifier.padding(innerPadding))
+                        }
+                        false -> {
+                            OnboardingScreen(
+                                onFinished = {
+                                    mainViewModel.completeOnboarding()
+                                },
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                        true -> {
+                            ScaffoldNotificationObserver(notificationManager = notificationManager)
+                            NavigationComponent(
+                                navController = navController,
+                                modifier = Modifier.padding(innerPadding),
+                                mainViewModel = mainViewModel
+                            )
+                        }
                     }
                 }
             }

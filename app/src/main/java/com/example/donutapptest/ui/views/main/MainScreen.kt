@@ -18,37 +18,49 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.donutapptest.R
 import com.example.donutapptest.ui.components.BottomBar
+import com.example.donutapptest.ui.theme.DonutAppTestTheme
 import com.example.donutapptest.ui.views.cart.CartScreen
 import com.example.donutapptest.ui.views.favorites.FavoritesScreen
-import com.example.donutapptest.ui.views.home.HomeScreen
+import com.example.donutapptest.ui.views.home.HomeRoute
 import com.example.donutapptest.utils.enums.Screens
 
 @Composable
-fun MainScreen(
-    navController: NavHostController,
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+fun MainRoute(
+    onLogoutSuccess: () -> Unit,
+    modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
+    val username by mainViewModel.username.collectAsStateWithLifecycle()
+    val isLoggedOut by mainViewModel.isLoggedOut.collectAsStateWithLifecycle()
+
     var currentRoute by remember { mutableStateOf(Screens.HOME.route) }
-    val username by mainScreenViewModel.username.collectAsState()
+
+    LaunchedEffect(isLoggedOut) {
+        if (isLoggedOut) {
+            mainViewModel.resetLogoutState()
+            onLogoutSuccess()
+        }
+    }
 
     MainScreenContent(
-        username = username ?: "Usuario",
+        username = username ?: stringResource(id = R.string.app_name),
         currentRoute = currentRoute,
         onNavigate = { newRoute -> currentRoute = newRoute },
-        navController = navController
+        onLogoutClick = mainViewModel::logout,
+        modifier = modifier
     )
 }
 
@@ -58,21 +70,10 @@ fun MainScreenContent(
     username: String,
     currentRoute: String,
     onNavigate: (String) -> Unit,
-    navController: NavHostController,
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+    onLogoutClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
-    val isLoggedOut by mainScreenViewModel.isLoggedOut.collectAsState()
-
-    LaunchedEffect(isLoggedOut) {
-        if (isLoggedOut) {
-            navController.navigate(Screens.LOGIN.route) {
-                popUpTo(Screens.HOME.route) { inclusive = true }
-                launchSingleTop = true
-            }
-            menuExpanded = false
-        }
-    }
 
     val title = when (currentRoute) {
         Screens.HOME.route -> stringResource(R.string.bottom_nav_home)
@@ -82,6 +83,7 @@ fun MainScreenContent(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -107,13 +109,14 @@ fun MainScreenContent(
                             Text(
                                 text = username,
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                                style = MaterialTheme.typography.labelLarge,
+                                style = MaterialTheme.typography.labelLarge
                             )
                             HorizontalDivider()
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.nav_logout)) },
                                 onClick = {
-                                    mainScreenViewModel.logout()
+                                    menuExpanded = false
+                                    onLogoutClick()
                                 },
                                 leadingIcon = {
                                     Icon(
@@ -139,13 +142,27 @@ fun MainScreenContent(
             )
         }
     ) { innerPadding ->
-        val modifier = Modifier
+        val contentModifier = Modifier
             .padding(innerPadding)
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
+
         when (currentRoute) {
-            Screens.HOME.route -> HomeScreen(modifier = modifier)
-            Screens.FAVORITES.route -> FavoritesScreen(modifier = modifier)
-            Screens.CART.route -> CartScreen(modifier = modifier)
+            Screens.HOME.route -> HomeRoute(modifier = contentModifier)
+            Screens.FAVORITES.route -> FavoritesScreen(modifier = contentModifier)
+            Screens.CART.route -> CartScreen(modifier = contentModifier)
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun MainScreenContentPreview() {
+    DonutAppTestTheme {
+        MainScreenContent(
+            username = "donutlover@example.com",
+            currentRoute = Screens.HOME.route,
+            onNavigate = {},
+            onLogoutClick = {}
+        )
     }
 }

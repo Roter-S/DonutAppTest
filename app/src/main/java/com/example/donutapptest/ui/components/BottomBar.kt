@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.donutapptest.data.source.local.BottomBarDataSource
+import com.example.donutapptest.ui.views.main.BottomBarDataSource
 
 @Composable
 fun BottomBar(

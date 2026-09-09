@@ -1,5 +1,6 @@
 package com.example.donutapptest.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,21 +13,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
 fun NavigationPromptRow(
-    navController: NavController, promptTextId: Int, actionTextId: Int, navigationRoute: String
+    @StringRes promptTextId: Int,
+    @StringRes actionTextId: Int,
+    onActionClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 16.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
             text = stringResource(id = promptTextId),
-            color = MaterialTheme.colorScheme.secondary,
+            color = MaterialTheme.colorScheme.secondary
         )
         Text(
             text = stringResource(id = actionTextId),
@@ -34,8 +37,7 @@ fun NavigationPromptRow(
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(start = 4.dp)
-                .clickable {
-                    navController.navigate(navigationRoute)
-                })
+                .clickable { onActionClick() }
+        )
     }
 }

@@ -2,7 +2,6 @@ package com.example.donutapptest.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,37 +32,47 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.donutapptest.core.common.UiText
 
 @Composable
 fun OutlinedRoundedField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     label: String = "",
     placeholder: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     enabled: Boolean = true,
-    errorMessage: String? = null
+    errorMessage: UiText? = null
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     val isError = errorMessage != null
-    val baseColor =
-        if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-            alpha = 0.3f
-        )
+    val baseColor = if (enabled) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+    }
     val errorColor = MaterialTheme.colorScheme.error
 
     val borderColor = if (isError) errorColor else baseColor
     val textColor = if (isError) errorColor else baseColor
     val iconTint = if (isError) errorColor else baseColor
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = label, color = textColor, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
+    Column(modifier = modifier.fillMaxWidth()) {
+        if (label.isNotEmpty()) {
+            Text(
+                text = label,
+                color = textColor,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+        }
         Box(
             modifier = Modifier
                 .border(
-                    width = 1.dp, color = borderColor, shape = RoundedCornerShape(24.dp)
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(24.dp)
                 )
                 .background(Color.Transparent)
                 .fillMaxWidth()
@@ -80,7 +90,11 @@ fun OutlinedRoundedField(
                     textStyle = MaterialTheme.typography.bodyLarge.copy(color = textColor),
                     cursorBrush = SolidColor(textColor),
                     keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-                    visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+                    visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible) {
+                        PasswordVisualTransformation()
+                    } else {
+                        VisualTransformation.None
+                    },
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -101,25 +115,29 @@ fun OutlinedRoundedField(
                             innerTextField()
                         }
                     },
-                    enabled = enabled
+                    enabled = enabled,
+                    singleLine = true
                 )
                 if (keyboardType == KeyboardType.Password) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                        tint = iconTint,
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .clickable(enabled = enabled) { passwordVisible = !passwordVisible })
+                    IconButton(
+                        onClick = { passwordVisible = !passwordVisible },
+                        enabled = enabled
+                    ) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            tint = iconTint
+                        )
+                    }
                 }
             }
         }
-        errorMessage?.let {
+        errorMessage?.let { error ->
             Text(
-                text = it,
+                text = error.asString(),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 4.dp, start = 16.dp),
+                modifier = Modifier.padding(top = 4.dp, start = 16.dp)
             )
         }
     }

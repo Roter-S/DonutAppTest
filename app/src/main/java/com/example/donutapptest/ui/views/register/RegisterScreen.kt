@@ -1,108 +1,135 @@
 package com.example.donutapptest.ui.views.register
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.donutapptest.R
-import com.example.donutapptest.data.repository.FakeUserRepository
-import com.example.donutapptest.data.session.SessionManager
 import com.example.donutapptest.ui.components.FormContainer
 import com.example.donutapptest.ui.components.LoadingButton
 import com.example.donutapptest.ui.components.LogoImage
 import com.example.donutapptest.ui.components.NavigationPromptRow
 import com.example.donutapptest.ui.components.OutlinedRoundedField
+import com.example.donutapptest.ui.theme.DonutAppTestTheme
+import com.example.donutapptest.ui.views.register.model.RegisterUiEvent
+import com.example.donutapptest.ui.views.register.model.RegisterUiState
+
+@Composable
+fun RegisterRoute(
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is RegisterUiEvent.NavigateToHome -> onNavigateToHome()
+            }
+        }
+    }
+
+    RegisterScreen(
+        uiState = uiState,
+        onFirstNameChange = viewModel::onFirstNameChange,
+        onLastNameChange = viewModel::onLastNameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+        onRegisterClick = viewModel::register,
+        onLoginClick = onNavigateToLogin,
+        modifier = modifier
+    )
+}
 
 @Composable
 fun RegisterScreen(
-    navController: NavHostController, registerViewModel: RegisterViewModel = hiltViewModel()
+    uiState: RegisterUiState,
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val uiState by registerViewModel.uiState.collectAsState()
-    val context = LocalContext.current
-    val focusManager = LocalFocusManager.current
-
-    FormContainer(focusManager = focusManager) {
+    FormContainer(modifier = modifier) {
         LogoImage()
+
         OutlinedRoundedField(
             value = uiState.firstName,
-            onValueChange = { registerViewModel.onFirstNameChange(it) },
+            onValueChange = onFirstNameChange,
             label = stringResource(id = R.string.register_firstname_label),
             placeholder = stringResource(id = R.string.register_firstname_placeholder),
             keyboardType = KeyboardType.Text,
             enabled = !uiState.isLoading,
-            errorMessage = uiState.firstNameError,
+            errorMessage = uiState.firstNameError
         )
+
         OutlinedRoundedField(
             value = uiState.lastName,
-            onValueChange = { registerViewModel.onLastNameChange(it) },
+            onValueChange = onLastNameChange,
             label = stringResource(id = R.string.register_lastname_label),
             placeholder = stringResource(id = R.string.register_lastname_placeholder),
             keyboardType = KeyboardType.Text,
             enabled = !uiState.isLoading,
-            errorMessage = uiState.lastNameError,
+            errorMessage = uiState.lastNameError
         )
+
         OutlinedRoundedField(
             value = uiState.email,
-            onValueChange = { registerViewModel.onEmailChange(it, context) },
+            onValueChange = onEmailChange,
             label = stringResource(id = R.string.register_email_label),
             placeholder = stringResource(id = R.string.register_email_placeholder),
             keyboardType = KeyboardType.Email,
             enabled = !uiState.isLoading,
-            errorMessage = uiState.emailError,
+            errorMessage = uiState.emailError
         )
+
         OutlinedRoundedField(
             value = uiState.password,
-            onValueChange = { registerViewModel.onPasswordChange(it) },
+            onValueChange = onPasswordChange,
             label = stringResource(id = R.string.register_password_label),
             placeholder = stringResource(id = R.string.register_password_placeholder),
             keyboardType = KeyboardType.Password,
             enabled = !uiState.isLoading,
-            errorMessage = uiState.passwordError,
+            errorMessage = uiState.passwordError
         )
+
         OutlinedRoundedField(
             value = uiState.confirmPassword,
-            onValueChange = { registerViewModel.onConfirmPasswordChange(it) },
+            onValueChange = onConfirmPasswordChange,
             label = stringResource(id = R.string.register_confirm_password_label),
             placeholder = stringResource(id = R.string.register_confirm_password_placeholder),
             keyboardType = KeyboardType.Password,
             enabled = !uiState.isLoading,
-            errorMessage = uiState.confirmPasswordError,
+            errorMessage = uiState.confirmPasswordError
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         LoadingButton(
             text = stringResource(id = R.string.register_button),
             isLoading = uiState.isLoading,
             isEnabled = uiState.isFormValid,
-            onClick = {
-                registerViewModel.validateRegister(onResult = { isRegisterSuccessful ->
-                    if (isRegisterSuccessful) {
-                        navController.navigate("home") {
-                            popUpTo(0) { inclusive = true }
-                            launchSingleTop = true
-                        }
-                    }
-                }, context = context)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp)
+            onClick = onRegisterClick
         )
+
         NavigationPromptRow(
-            navController = navController,
             promptTextId = R.string.register_login_prompt,
             actionTextId = R.string.register_login_here,
-            navigationRoute = "login"
+            onActionClick = onLoginClick
         )
     }
 }
@@ -110,10 +137,21 @@ fun RegisterScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun RegisterScreenPreview() {
-    val navController = rememberNavController()
-    val context = LocalContext.current
-    val fakeRepository = remember { FakeUserRepository() }
-    val fakeSessionManager = remember { SessionManager(context) }
-    val registerViewModel = remember { RegisterViewModel(fakeRepository, fakeSessionManager) }
-    RegisterScreen(navController = navController, registerViewModel = registerViewModel)
+    DonutAppTestTheme {
+        RegisterScreen(
+            uiState = RegisterUiState(
+                firstName = "John",
+                lastName = "Doe",
+                email = "john@example.com",
+                isFormValid = true
+            ),
+            onFirstNameChange = {},
+            onLastNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onRegisterClick = {},
+            onLoginClick = {}
+        )
+    }
 }

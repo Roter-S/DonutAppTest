@@ -22,8 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -41,12 +40,17 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.example.donutapptest.data.model.Donut
+import com.example.donutapptest.R
+import com.example.donutapptest.domain.model.Donut
 import com.example.donutapptest.ui.preview.SampleData
 import java.util.Locale
 
 @Composable
-fun LabeledText(label: String, value: String) {
+fun LabeledText(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
     Text(
         text = buildAnnotatedString {
             withStyle(
@@ -61,22 +65,22 @@ fun LabeledText(label: String, value: String) {
                 append(value)
             }
         },
-        style = MaterialTheme.typography.bodyMedium
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = modifier
     )
 }
 
 @Composable
 fun DonutItem(
     donut: Donut,
-    onFavoriteClick: (Boolean) -> Unit = {}
+    onFavoriteClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val isFavorite = remember { mutableStateOf(false) }
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(6.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -94,7 +98,7 @@ fun DonutItem(
                         .build(),
                     contentDescription = donut.name,
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(110.dp)
                         .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop,
                     error = rememberVectorPainter(Icons.Default.BrokenImage)
@@ -105,19 +109,22 @@ fun DonutItem(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 48.dp),
+                        .padding(end = 40.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = donut.name,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                    LabeledText(label = "Tipo", value = donut.type)
+                    LabeledText(
+                        label = stringResource(R.string.donut_label_type),
+                        value = donut.type
+                    )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
@@ -128,33 +135,34 @@ fun DonutItem(
                         color = MaterialTheme.colorScheme.primary
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    if (donut.batters.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        LabeledText(
+                            label = stringResource(R.string.donut_label_batters),
+                            value = donut.batters.joinToString(", ") { it.type }
+                        )
+                    }
 
-                    LabeledText(
-                        label = "Batters",
-                        value = donut.batters.batter.joinToString(", ") { it.type }
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    LabeledText(
-                        label = "Toppings",
-                        value = donut.topping.joinToString(", ") { it.type }
-                    )
+                    if (donut.toppings.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        LabeledText(
+                            label = stringResource(R.string.donut_label_toppings),
+                            value = donut.toppings.joinToString(", ") { it.type }
+                        )
+                    }
                 }
             }
 
             IconButton(
-                onClick = {
-                    isFavorite.value = !isFavorite.value
-                    onFavoriteClick(isFavorite.value)
-                },
+                onClick = { onFavoriteClick(!donut.isFavorite) },
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(
-                    imageVector = if (isFavorite.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = if (isFavorite.value) "Quitar de favoritos" else "Agregar a favoritos",
-                    tint = if (isFavorite.value) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant,
+                    imageVector = if (donut.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = stringResource(
+                        if (donut.isFavorite) R.string.donut_action_remove_favorite else R.string.donut_action_add_favorite
+                    ),
+                    tint = if (donut.isFavorite) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -165,5 +173,8 @@ fun DonutItem(
 @Preview(showBackground = true)
 @Composable
 fun DonutItemPreview() {
-    DonutItem(donut = SampleData.sampleDonut)
+    DonutItem(
+        donut = SampleData.sampleDonut,
+        onFavoriteClick = {}
+    )
 }
