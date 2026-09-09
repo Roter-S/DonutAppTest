@@ -1,6 +1,7 @@
-package com.example.donutapptest.data.session
+package com.example.donutapptest.di
 
 import android.content.Context
+import com.example.donutapptest.data.session.SessionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,11 +11,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SessionModule {
+object DataStoreModule {
+
     @Provides
     @Singleton
     fun provideSessionManager(@ApplicationContext context: Context): SessionManager {
         return SessionManager(context)
     }
 }
-

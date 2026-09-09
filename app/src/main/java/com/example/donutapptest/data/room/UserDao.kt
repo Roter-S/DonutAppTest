@@ -2,20 +2,21 @@ package com.example.donutapptest.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.donutapptest.data.model.User
+import com.example.donutapptest.data.local.entity.UserEntity
 
 @Dao
 interface UserDao {
-    @Insert
-    suspend fun insertUser(user: User): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserEntity): Long
 
     @Query("SELECT * FROM users")
-    suspend fun getAllUsers(): List<User>
+    suspend fun getAllUsers(): List<UserEntity>
 
-    @Query("SELECT * FROM users WHERE username = :username")
-    suspend fun findUserByUsername(username: String): User?
+    @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
+    suspend fun findUserByUsername(username: String): UserEntity?
 
     @Query("SELECT * FROM users WHERE last_login IS NOT NULL ORDER BY last_login DESC LIMIT 1")
-    suspend fun getMostRecentUser(): User?
+    suspend fun getMostRecentUser(): UserEntity?
 }
